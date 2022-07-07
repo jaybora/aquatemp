@@ -9,13 +9,17 @@ class MyDevice extends Homey.Device {
    * onInit is called when the device is initialized.
    */
   async onInit() {
+    this.log('MyDevice has been initialized');
     this.registerCapabilityListener('target_temperature', async (value) => {
       this.setTemp(value);
     });
     this.registerCapabilityListener('onoff', async (value) => {
+      this.setOnOff(value);
+    });
+    //TODO
+    this.registerCapabilityListener('thermostat_mode', async (value) => {
       console.log(value);
     });
-    this.log('MyDevice has been initialized');
     var result = await this.getFreshData();
     this.setValues(result);
 
@@ -132,6 +136,32 @@ class MyDevice extends Homey.Device {
         break;
     }
     return targetTemp;
+  }
+
+  //TODO
+  async setHvacMode(){
+
+  }
+
+  async setOnOff(isTurnOn: boolean){
+    let data = {};
+    if(isTurnOn){
+      data = {"param":[{"device_code":this.MY_DEVICE_CODE,"protocol_code":"power","value":"1"}]}
+    } else{
+      data = {"param":[{"device_code":this.MY_DEVICE_CODE,"protocol_code":"power","value":"0"}]}
+    }
+    var optionsOnOff = {
+      uri: 'https://cloud.linked-go.com/cloudservice/api/app/device/control.json',
+      headers: {
+        'Content-Type': 'application/json; charset=utf-8',
+        'x-token' : this.X_TOKEN
+      },
+      json: data
+    }
+    let res = await http.post(optionsOnOff);
+    if(res.error_msg === "Success"){
+      this.HVAC_MODE = 'off';
+    }
   }
 
   getHvacMode(result: any){
