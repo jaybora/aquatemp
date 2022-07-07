@@ -13,6 +13,7 @@
   "description": {
     "en": "Adds support for Aquatemp wifi module"
   },
+  "brandColor": "#0000ff",
   "category": [
     "climate"
   ],
@@ -45,9 +46,9 @@
       ],
       "connectivity": [],
       "images": {
-        "small": "/drivers/aquatemp/assets/images/small.png",
-        "large": "/drivers/aquatemp/assets/images/large.png",
-        "xlarge": "/drivers/aquatemp/assets/images/xlarge.png"
+        "small": "/drivers/aquatemp/assets/images/small.jpg",
+        "large": "/drivers/aquatemp/assets/images/large.jpg",
+        "xlarge": "/drivers/aquatemp/assets/images/xlarge.jpg"
       },
       "pair": [
         {
