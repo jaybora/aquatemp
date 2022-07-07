@@ -16,9 +16,8 @@ class MyDevice extends Homey.Device {
     this.registerCapabilityListener('onoff', async (value) => {
       this.setOnOff(value);
     });
-    //TODO
     this.registerCapabilityListener('thermostat_mode', async (value) => {
-      console.log(value);
+      this.setHvacMode(value);
     });
     var result = await this.getFreshData();
     this.setValues(result);
@@ -126,21 +125,16 @@ class MyDevice extends Homey.Device {
     let targetTemp = 0;
     switch(hvacMode) {
       case 'cool':
-        targetTemp = Number(result.data.object_result.find((x: any) => x.code === 'R02').value) > 35 ? 35 : (Number(result.data.object_result.find((x: any) => x.code === 'R01').value));
-        break;
-      case 'heat':
-        targetTemp = Number(result.data.object_result.find((x: any) => x.code === 'R02').value) > 35 ? 35 : (Number(result.data.object_result.find((x: any) => x.code === 'R02').value));
+        targetTemp = Number(result.data.object_result.find((x: any) => x.code === 'R01').value) > 35 ? 35 : (Number(result.data.object_result.find((x: any) => x.code === 'R01').value));
         break;
       case 'auto':
-        targetTemp = Number(result.data.object_result.find((x: any) => x.code === 'R02').value) > 35 ? 35 : (Number(result.data.object_result.find((x: any) => x.code === 'R03').value));
+        targetTemp = Number(result.data.object_result.find((x: any) => x.code === 'R03').value) > 35 ? 35 : (Number(result.data.object_result.find((x: any) => x.code === 'R03').value));
+        break;
+      default:
+        targetTemp = Number(result.data.object_result.find((x: any) => x.code === 'R02').value) > 35 ? 35 : (Number(result.data.object_result.find((x: any) => x.code === 'R02').value));
         break;
     }
     return targetTemp;
-  }
-
-  //TODO
-  async setHvacMode(){
-
   }
 
   async setOnOff(isTurnOn: boolean){
@@ -159,14 +153,16 @@ class MyDevice extends Homey.Device {
       json: data
     }
     let res = await http.post(optionsOnOff);
-    if(res.error_msg === "Success"){
-      this.HVAC_MODE = 'off';
+    if(res.data.error_msg === "Success"){
+      isTurnOn ? this.HVAC_MODE = 'heat' : this.HVAC_MODE = 'off';
+      this.setCapabilityValue('thermostat_mode', this.HVAC_MODE);
     }
   }
 
   getHvacMode(result: any){
     let mode = "";
     let modeString = result.data.object_result.find((x: any) => x.code === 'Mode');
+    let power = result.data.object_result.find((x: any) => x.code === 'Power');
     switch(modeString.value){
       case '0':
         mode = 'cool';
@@ -178,7 +174,55 @@ class MyDevice extends Homey.Device {
         mode = 'auto';
         break;
     }
-    this.HVAC_MODE = mode;
+    power.value === '0' ? this.HVAC_MODE = 'off' : this.HVAC_MODE = mode;
+  }
+
+  async setHvacMode(newMode: string){
+    let value = "";
+    let code = "mode";
+    if(this.HVAC_MODE === 'off' && newMode !== 'off'){
+      let data = {"param":[{"device_code":this.MY_DEVICE_CODE,"protocol_code":"power","value":"1"}]}
+      var optionsOnOff = {
+        uri: 'https://cloud.linked-go.com/cloudservice/api/app/device/control.json',
+        headers: {
+          'Content-Type': 'application/json; charset=utf-8',
+          'x-token' : this.X_TOKEN
+        },
+        json: data
+      }
+      let res = await http.post(optionsOnOff);
+      if(res.data.error_msg == "Success"){
+        this.setCapabilityValue('onoff', true).catch(this.error);
+      }
+    }
+    switch(newMode) {
+      case 'cool':
+        value = "0";
+        break;
+      case 'heat':
+        value = "1";
+        break;
+      case 'auto':
+        value = "2";
+        break;
+      case 'off':
+        value = "0";
+        code = "power";
+        break;
+    }
+    let data = {"param":[{"device_code":this.MY_DEVICE_CODE,"protocol_code":code,"value":value}]}
+    var optionsChangeHVAC = {
+      uri: 'https://cloud.linked-go.com/cloudservice/api/app/device/control.json',
+      headers: {
+        'Content-Type': 'application/json; charset=utf-8',
+        'x-token' : this.X_TOKEN
+      },
+      json: data
+    }
+    let res = await http.post(optionsChangeHVAC);
+    if(res.data.error_msg == "Success"){
+      this.setCapabilityValue('thermostat_mode', newMode).catch(this.error);
+    }
   }
 
   async setTemp(desiredTemp: number){
