@@ -1,0 +1,12 @@
+{
+    "type": "number",
+    "title": { "en": "Pool outlet" },
+    "uiComponent": "sensor",
+    "getable": true,
+    "setable": false,
+    "icon": "/assets/images/right.svg",
+    "units": { "en": "°C" },
+    "min": 0,
+    "max": 50,
+    "step": 0.5
+  }

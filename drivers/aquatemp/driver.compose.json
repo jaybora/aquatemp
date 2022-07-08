@@ -9,7 +9,9 @@
     "onoff",
     "measure_voltage",
     "target_temperature",
-    "thermostat_mode"
+    "thermostat_mode",
+    "outlet",
+    "inlet"
   ],
   "platforms": [
     "local"

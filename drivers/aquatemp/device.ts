@@ -10,6 +10,12 @@ class MyDevice extends Homey.Device {
    */
   async onInit() {
     this.log('MyDevice has been initialized');
+    if (this.hasCapability('outlet') === false) {
+      await this.addCapability('outlet');
+    }
+    if (this.hasCapability('inlet') === false) {
+      await this.addCapability('inlet');
+    }
     this.registerCapabilityListener('target_temperature', async (value) => {
       this.setTemp(value);
     });
@@ -119,6 +125,11 @@ class MyDevice extends Homey.Device {
 
     let targetTemp = this.getTargetTemp(this.HVAC_MODE, result);
     this.setCapabilityValue('target_temperature', targetTemp).catch(this.error);
+
+    let outletTemp = Number(result.data.object_result.find((x: any) => x.code === "T03").value);
+    let inletTemp = Number(result.data.object_result.find((x: any) => x.code === "T02").value);
+    this.setCapabilityValue('inlet', inletTemp).catch(this.error);
+    this.setCapabilityValue('outlet', outletTemp).catch(this.error);
   }
 
   getTargetTemp(hvacMode: string, result: any) {
