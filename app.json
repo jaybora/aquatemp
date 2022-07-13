@@ -40,6 +40,7 @@
         "measure_voltage",
         "target_temperature",
         "thermostat_mode",
+        "measure_power",
         "outlet",
         "inlet"
       ],

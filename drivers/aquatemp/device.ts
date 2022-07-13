@@ -13,6 +13,9 @@ class MyDevice extends Homey.Device {
     if (this.hasCapability('outlet') === false) {
       await this.addCapability('outlet');
     }
+    if (this.hasCapability('measure_power') === false) {
+      await this.addCapability('measure_power');
+    }
     if (this.hasCapability('inlet') === false) {
       await this.addCapability('inlet');
     }
