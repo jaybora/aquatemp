@@ -119,6 +119,7 @@ class MyDevice extends Homey.Device {
   async setValues(result: any){
     this.setCapabilityValue('measure_temperature', Number(result.data.object_result[4].value)).catch(this.error);
     this.setCapabilityValue('measure_voltage', Number(result.data.object_result[28].value)).catch(this.error);
+    this.setCapabilityValue('measure_power', (Number(result.data.object_result[28].value * Number(result.data.object_result[26].value))));
     let onoff = Number(result.data.object_result[0].value);
     this.setCapabilityValue('onoff', onoff == 1 ? true : false).catch(this.error);
     this.setCapabilityValue('meter_power', (Number(result.data.object_result[28].value * Number(result.data.object_result[26].value)) / 1000)).catch(this.error);
