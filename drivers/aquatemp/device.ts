@@ -1,5 +1,7 @@
 import Homey from 'homey';
 var http = require('http.min');
+const axios = require('axios')
+const https = require('https')
 
 class MyDevice extends Homey.Device {
   public MY_DEVICE_CODE = "";
@@ -74,45 +76,89 @@ class MyDevice extends Homey.Device {
   }
 
   async getFreshData(){
-    var optionsLogin = {
-      uri: 'https://cloud.linked-go.com/cloudservice/api/app/user/login.json',
+    const agent = new https.Agent({
+      rejectUnauthorized: false,
+    });
+
+    //var optionsLogin = {
+    //  uri: 'https://cloud.linked-go.com/cloudservice/api/app/user/login.json',
+    //  headers: {
+    //    'Content-Type': 'application/json; charset=utf-8'
+    //  },
+    //  json: {
+    //    "user_name": this.homey.settings.get('username'),
+    //    "password": this.homey.settings.get('password') ,
+    //    "type":"2"
+    //  }
+    //};
+    axios.defaults.httpsAgent = agent;
+    var result = await axios({
+      method: 'post',
+      url: 'https://cloud.linked-go.com/cloudservice/api/app/user/login.json',
       headers: {
         'Content-Type': 'application/json; charset=utf-8'
       },
-      json: {
+      data: {
         "user_name": this.homey.settings.get('username'),
         "password": this.homey.settings.get('password') ,
         "type":"2"
       }
-    }
-    var result = await http.post(optionsLogin);
+    });
+    //console.log(result.data.object_result['x-token']);
+
+    //var result = await http.post(optionsLogin);
 
     this.X_TOKEN = result.data.object_result['x-token'];
 
-    var optionsGetDevices = {
-      uri: 'https://cloud.linked-go.com/cloudservice/api/app/device/deviceList.json',
+    //var optionsGetDevices = {
+    //  uri: 'https://cloud.linked-go.com/cloudservice/api/app/device/deviceList.json',
+    //  headers: {
+    //    'Content-Type': 'application/json; charset=utf-8',
+    //    'x-token' : this.X_TOKEN
+    //  }
+    //}
+    var jsonDeviceResult = await axios({
+      method: 'post',
+      url: 'https://cloud.linked-go.com/cloudservice/api/app/device/deviceList.json',
       headers: {
         'Content-Type': 'application/json; charset=utf-8',
         'x-token' : this.X_TOKEN
       }
-    }
-    var devicesResult = await http.post(optionsGetDevices);
-    var jsonDeviceResult = await JSON.parse(devicesResult.data);
+    });
+    //var devicesResult = await http.post(optionsGetDevices);
+    //console.log(jsonDeviceResult.data);
+    var test = await JSON.parse(JSON.stringify(jsonDeviceResult.data));
+    //console.log('test', test)
+    //console.log("test.object_result", test.object_result)
+    //console.log('array', test.object_result[0])
+    //console.log('device code', test.object_result[0].device_code)
+    //console.log('device code', jsonDeviceResult.object_result[0]['device_code']);
+    this.MY_DEVICE_CODE = test.object_result[0].device_code;
 
-    this.MY_DEVICE_CODE = jsonDeviceResult.object_result[0].device_code;
-
-    var optionsGetDeviceByCode = {
-      uri: 'https://cloud.linked-go.com/cloudservice/api/app/device/getDataByCode.json',
+    //var optionsGetDeviceByCode = {
+    //  uri: 'https://cloud.linked-go.com/cloudservice/api/app/device/getDataByCode.json',
+    //  headers: {
+    //    'Content-Type': 'application/json; charset=utf-8',
+    //    'x-token' : this.X_TOKEN
+    //  },
+    //  json: {
+    //    "device_code": this.MY_DEVICE_CODE,
+    //    "protocal_codes": ["Power","Mode","Manual-mute","T01","T02","2074","2075","2076","2077","H03","Set_Temp","R08","R09","R10","R11","R01","R02","R03","T03","1158","1159","F17","H02","T04","T05","T06","T07","T12","T14"]
+    //  }
+    //}
+    //var idResult = await http.post(optionsGetDeviceByCode);
+    var idResult = await axios({
+      method: 'post',
+      url: 'https://cloud.linked-go.com/cloudservice/api/app/device/getDataByCode.json',
       headers: {
         'Content-Type': 'application/json; charset=utf-8',
         'x-token' : this.X_TOKEN
       },
-      json: {
+      data: {
         "device_code": this.MY_DEVICE_CODE,
         "protocal_codes": ["Power","Mode","Manual-mute","T01","T02","2074","2075","2076","2077","H03","Set_Temp","R08","R09","R10","R11","R01","R02","R03","T03","1158","1159","F17","H02","T04","T05","T06","T07","T12","T14"]
       }
-    }
-    var idResult = await http.post(optionsGetDeviceByCode);
+    });
     return idResult;
   }
 
