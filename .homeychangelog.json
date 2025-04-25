@@ -10,5 +10,11 @@
   },
   "1.0.3":{
     "en": "Workaround until aquatemp renews certificate"
+  },
+  "1.0.3":{
+    "en": "Workaround until aquatemp renews certificate"
+  },
+  "1.0.4": {
+    "en": "Fixed login issue. Fixed missing insights on outlet temperature."
   }
 }
