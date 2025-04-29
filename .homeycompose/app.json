@@ -1,6 +1,6 @@
 {
-  "id": "com.aquatemp.gullbergjansson",
-  "version": "1.0.3",
+  "id": "dk.jbr.aquatemp",
+  "version": "1.0.4",
   "compatibility": ">=5.0.0",
   "sdk": 3,
   "platforms": [
@@ -12,7 +12,7 @@
   "description": {
     "en": "Adds support for Aquatemp wifi module"
   },
-  "brandColor": "#0000ff",
+  "brandColor": "#3fb6f9",
   "category": [
     "climate"
   ],
@@ -23,7 +23,19 @@
     "xlarge": "/assets/images/xlarge.png"
   },
   "author": {
-    "name": "Ludwig Hallgren",
-    "email": "ludwig.hallgren@gmail.com"
-  }
+    "name": "Jesper Rasmussen",
+    "email": "support@jbr.dk"
+  },
+  "contributors": {
+    "developers": [
+      {
+        "name": "Jesper Rasmussen"
+      },
+      {
+        "name": "Ludwig Hallgren"
+      }
+    ]
+  },
+  "homeyCommunityTopicId": 65612,
+  "support": "mailto:support@jbr.dk"
 }
