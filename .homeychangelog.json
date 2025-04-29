@@ -2,19 +2,19 @@
   "1.0.0": {
     "en": "Aquatemp integration"
   },
-  "1.0.1":{
+  "1.0.1": {
     "en": "Added inlet and outlet as sensor data"
   },
-  "1.0.2":{
+  "1.0.2": {
     "en": "Added real power measure as sensor data"
   },
-  "1.0.3":{
-    "en": "Workaround until aquatemp renews certificate"
-  },
-  "1.0.3":{
+  "1.0.3": {
     "en": "Workaround until aquatemp renews certificate"
   },
   "1.0.4": {
     "en": "Fixed login issue. Fixed missing insights on outlet temperature."
+  },
+  "1.0.5": {
+    "en": "New icons"
   }
 }
