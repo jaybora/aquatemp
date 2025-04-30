@@ -1,25 +1,11 @@
 import Homey from 'homey';
-import { hashPassword } from '../../hasher';
-
-const http = require('http.min');
-const axios = require('axios');
-const https = require('https');
-
-class ApiEndpoints {
-
-  public static readonly BASE_URL = 'https://cloud.linked-go.com:449/crmservice/api';
-  public static readonly USER_LOGIN = `${this.BASE_URL}/app/user/login`;
-  public static readonly DEVICE_LIST = `${this.BASE_URL}/app/device/deviceList`;
-  public static readonly GET_DATA_BY_CODE = `${this.BASE_URL}/app/device/getDataByCode`;
-  public static readonly CONTROL = `${this.BASE_URL}/app/device/control`;
-
-}
+import { AquatempAPI } from './aquatempAPI';
 
 class HeatPumpDevice extends Homey.Device {
 
-  public MY_DEVICE_CODE = '';
   public HVAC_MODE = '';
-  public X_TOKEN = '';
+  private timer: NodeJS.Timeout | null = null;
+
   /**
    * onInit is called when the device is initialized.
    */
@@ -47,7 +33,7 @@ class HeatPumpDevice extends Homey.Device {
    * onAdded is called when the user adds the device, called just after pairing.
    */
   async onAdded() {
-    this.log('HeatPumpDevice has been added');
+    this.log(`HeatPumpDevice has been added with code ${this.getData().id}`);
   }
 
   /**
@@ -77,69 +63,22 @@ class HeatPumpDevice extends Homey.Device {
    */
   async onDeleted() {
     this.log('HeatPumpDevice has been deleted');
+    // Stop the timer if it is running
+    if (this.timer) {
+      clearInterval(this.timer);
+      this.timer = null; // Reset the timer reference
+    }
   }
 
-  async getFreshData() {
-    this.X_TOKEN = await this.authenticateUser();
-    this.log('x-token:', this.X_TOKEN);
-
-    const jsonDeviceResult = await axios({
-      method: 'post',
-      url: ApiEndpoints.DEVICE_LIST,
-      headers: {
-        'Content-Type': 'application/json; charset=utf-8',
-        'x-token': this.X_TOKEN,
-      },
-    });
-    // var devicesResult = await http.post(optionsGetDevices);
-    this.MY_DEVICE_CODE = jsonDeviceResult.data.objectResult[0].device_code;
-    this.log('MY_DEVICE_CODE:', this.MY_DEVICE_CODE);
-
-    const idResult = await axios({
-      method: 'post',
-      url: ApiEndpoints.GET_DATA_BY_CODE,
-      headers: {
-        'Content-Type': 'application/json; charset=utf-8',
-        'x-token': this.X_TOKEN,
-      },
-      data: {
-        device_code: this.MY_DEVICE_CODE,
-        // TODO: Handle the codes better
-        protocal_codes: ['Power', 'Mode', 'Manual-mute', 'T01', 'T02', '2074', '2075', '2076', '2077', 'H03', 'Set_Temp', 'R08', 'R09', 'R10', 'R11', 'R01', 'R02', 'R03', 'T03', '1158', '1159', 'F17', 'H02', 'T04', 'T05', 'T06', 'T07', 'T12', 'T14'],
-      },
-    });
-    return idResult;
+  async getFreshData(): Promise<any> {
+    const api = new AquatempAPI(this.getSetting('username'), this.getSetting('password'));
+    const deviceCode = this.getDeviceCode();
+    this.log('Fetching device data for device code', deviceCode);
+    return api.getDeviceData(deviceCode);
   }
 
-  private async authenticateUser(): Promise<string> {
-    const username = this.homey.settings.get('username') as string | null;
-    const plainPassword = (this.homey.settings.get('password') as string | null)?.slice(0, 16);
-
-    if (!username || !plainPassword) {
-      throw new Error('Username or password not set');
-    }
-    const hashedPassword = hashPassword(plainPassword);
-
-    const agent = new https.Agent({
-      rejectUnauthorized: false,
-    });
-
-    axios.defaults.httpsAgent = agent;
-    const result = await axios({
-      method: 'post',
-      url: ApiEndpoints.USER_LOGIN,
-      headers: {
-        'Content-Type': 'application/json; charset=utf-8',
-      },
-      data: {
-        userName: username,
-        password: hashedPassword,
-      },
-    });
-    if (!result.data.isReusltSuc) {
-      throw new Error('Login to aquatemp server failed. Username or password incorrect');
-    }
-    return result.data.objectResult['x-token'];
+  private getDeviceCode() {
+    return this.getData().id as string;
   }
 
   async setValues(result: any) {
@@ -182,24 +121,23 @@ class HeatPumpDevice extends Homey.Device {
   async setOnOff(isTurnOn: boolean) {
     let data = {};
     if (isTurnOn) {
-      data = { param: [{ device_code: this.MY_DEVICE_CODE, protocol_code: 'power', value: '1' }] };
+      data = { param: [{ device_code: this.getDeviceCode(), protocol_code: 'power', value: '1' }] };
     } else {
-      data = { param: [{ device_code: this.MY_DEVICE_CODE, protocol_code: 'power', value: '0' }] };
+      data = { param: [{ device_code: this.getDeviceCode(), protocol_code: 'power', value: '0' }] };
     }
-    const optionsOnOff = {
-      uri: ApiEndpoints.CONTROL,
-      headers: {
-        'Content-Type': 'application/json; charset=utf-8',
-        'x-token': this.X_TOKEN,
-      },
-      json: data,
-    };
-    const res = await http.post(optionsOnOff);
+    const res = await this.updateDeviceData(data);
     if (res.data.error_msg === 'Success') {
       this.HVAC_MODE = isTurnOn ? 'heat' : 'off';
       await this.setCapabilityValue('thermostat_mode', this.HVAC_MODE);
       this.log(`Turned to ${this.HVAC_MODE}`);
     }
+  }
+
+  private updateDeviceData(data: {}) {
+    return new AquatempAPI(this.getSetting('username'), this.getSetting('password')).setDeviceData(
+      this.getDeviceCode(),
+      data,
+    );
   }
 
   getHvacMode(result: any) {
@@ -216,24 +154,29 @@ class HeatPumpDevice extends Homey.Device {
       case '2':
         mode = 'auto';
         break;
+      default:
+        mode = 'unknown';
+        break;
     }
-    power.value === '0' ? this.HVAC_MODE = 'off' : this.HVAC_MODE = mode;
+    if (power.value === '0') {
+      this.HVAC_MODE = 'off';
+    } else {
+      this.HVAC_MODE = mode;
+    }
   }
 
   async setHvacMode(newMode: string) {
     let value = '';
     let code = 'mode';
     if (this.HVAC_MODE === 'off' && newMode !== 'off') {
-      const data = { param: [{ device_code: this.MY_DEVICE_CODE, protocol_code: 'power', value: '1' }] };
-      const optionsOnOff = {
-        uri: ApiEndpoints.CONTROL,
-        headers: {
-          'Content-Type': 'application/json; charset=utf-8',
-          'x-token': this.X_TOKEN,
-        },
-        json: data,
+      const data = {
+        param: [{
+          device_code: this.getDeviceCode(),
+          protocol_code: 'power',
+          value: '1',
+        }],
       };
-      const res = await http.post(optionsOnOff);
+      const res = await this.updateDeviceData(data);
       if (res.data.error_msg === 'Success') {
         this.setCapabilityValue('onoff', true).catch(this.error);
       }
@@ -253,16 +196,14 @@ class HeatPumpDevice extends Homey.Device {
         code = 'power';
         break;
     }
-    const data = { param: [{ device_code: this.MY_DEVICE_CODE, protocol_code: code, value }] };
-    const optionsChangeHVAC = {
-      uri: ApiEndpoints.CONTROL,
-      headers: {
-        'Content-Type': 'application/json; charset=utf-8',
-        'x-token': this.X_TOKEN,
-      },
-      json: data,
+    const data = {
+      param: [{
+        device_code: this.getDeviceCode(),
+        protocol_code: code,
+        value,
+      }],
     };
-    const res = await http.post(optionsChangeHVAC);
+    const res = await this.updateDeviceData(data);
     if (res.data.error_msg === 'Success') {
       this.setCapabilityValue('thermostat_mode', newMode).catch(this.error);
     }
@@ -281,29 +222,22 @@ class HeatPumpDevice extends Homey.Device {
         mode = 'R03';
         break;
     }
-    const optionsSetTemp = {
-      uri: ApiEndpoints.CONTROL,
-      headers: {
-        'Content-Type': 'application/json; charset=utf-8',
-        'x-token': this.X_TOKEN,
-      },
-      json: {
-        param:
+    const data = {
+      param:
           [
             {
-              device_code: this.MY_DEVICE_CODE,
+              device_code: this.getDeviceCode(),
               protocol_code: mode,
               value: desiredTemp,
             },
             {
-              device_code: this.MY_DEVICE_CODE,
+              device_code: this.getDeviceCode(),
               protocol_code: 'Set_Temp',
               value: desiredTemp,
             },
           ],
-      },
     };
-    await http.post(optionsSetTemp);
+    await this.updateDeviceData(data);
   }
 
 }

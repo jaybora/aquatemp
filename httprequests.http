@@ -6,7 +6,7 @@ Content-Type: application/json; charset=utf-8
 ###
 POST https://cloud.linked-go.com:449/crmservice/api/app/device/deviceList
 Content-Type: application/json; charset=utf-8
-x-token: ibQgkum/njMp2raXi7hR6QzY5wjB/vtPDaaRkhDfj3jRn13Xlalh5hS95vFP4uWvThAq0toh1iDxP6nFmwY1yQ==
+x-token: Fa+1hjBswfRRCGbmtMEKSyhYjP1RDom2ceBl3jnlWxRfaK1PKBJJ/7ylpdB0fhj9ThAq0toh1iDxP6nFmwY1yQ==
 
 ###
 
