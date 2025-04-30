@@ -16,5 +16,8 @@
   },
   "1.0.5": {
     "en": "New icons"
+  },
+  "1.1.0": {
+    "en": "Ask for username and password, when adding device. Removed the old app settings page. Added support for multiple devices."
   }
 }
