@@ -31,7 +31,7 @@ class MyDriver extends Homey.Driver {
 
       return devices.map(device => {
         return {
-          name: 'Heatpump $device',
+          name: `Heatpump ${device}`,
           data: {
             id: device,
           },

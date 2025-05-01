@@ -82,24 +82,32 @@ class HeatPumpDevice extends Homey.Device {
   }
 
   async setValues(result: any) {
-    this.setCapabilityValue('measure_voltage', Number(result.data.objectResult[28].value)).catch(this.error);
-    this.setCapabilityValue('measure_power', (Number(result.data.objectResult[28].value * Number(result.data.objectResult[26].value))));
-    const onoff = Number(result.data.objectResult[0].value);
-    this.setCapabilityValue('onoff', onoff === 1).catch(this.error);
-    this.setCapabilityValue('meter_power', (Number(result.data.objectResult[28].value * Number(result.data.objectResult[26].value)) / 1000)).catch(this.error);
+    await this.setCapabilityValue('measure_voltage', this.extractValueByCode(result, 'T14')).catch(this.error);
+    await this.setCapabilityValue('measure_frequency', this.extractValueByCode(result, 'T06')).catch(this.error);
+    await this.setCapabilityValue('measure_current', this.extractValueByCode(result, 'T07')).catch(this.error);
+    await this.setCapabilityValue('measure_power', this.extractValueByCode(result, 'T14') * this.extractValueByCode(result, 'T07'));
+    await this.setCapabilityValue('onoff', this.extractValueByCode(result, 'Power') === 1).catch(this.error);
+    await this.setCapabilityValue('meter_power', (this.extractValueByCode(result, 'T14') * this.extractValueByCode(result, 'T07')) / 1000).catch(this.error);
 
     this.getHvacMode(result);
-    this.setCapabilityValue('thermostat_mode', this.HVAC_MODE);
+    await this.setCapabilityValue('thermostat_mode', this.HVAC_MODE);
 
     const targetTemp = this.getTargetTemp(this.HVAC_MODE, result);
-    this.setCapabilityValue('target_temperature', targetTemp).catch(this.error);
+    await this.setCapabilityValue('target_temperature', targetTemp).catch(this.error);
 
-    const outletTemp = Number(result.data.objectResult.find((x: any) => x.code === 'T03').value);
-    const inletTemp = Number(result.data.objectResult.find((x: any) => x.code === 'T02').value);
-    this.setCapabilityValue('measure_temperature.inlet', inletTemp).catch(this.error);
-    this.setCapabilityValue('measure_temperature.outlet', outletTemp).catch(this.error);
-    this.setCapabilityValue('measure_temperature', inletTemp).catch(this.error);
+    await this.setCapabilityValue('measure_temperature.inlet', this.extractValueByCode(result, 'T02')).catch(this.error);
+    await this.setCapabilityValue('measure_temperature.outlet', this.extractValueByCode(result, 'T03')).catch(this.error);
+    await this.setCapabilityValue('measure_temperature.surrounding', this.extractValueByCode(result, 'T05')).catch(this.error);
+    await this.setCapabilityValue('measure_temperature', this.extractValueByCode(result, 'T02')).catch(this.error);
     this.log('Done updating values');
+  }
+
+  private extractValueByCode(result: any, code: string) {
+    const foundItem = result.data.objectResult.find((x: any) => x.code === code);
+    if (!foundItem) {
+      throw new Error(`Item with code "${code}" not found`);
+    }
+    return Number(foundItem.value);
   }
 
   getTargetTemp(hvacMode: string, result: any) {

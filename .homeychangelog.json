@@ -19,5 +19,8 @@
   },
   "1.1.0": {
     "en": "Ask for username and password, when adding device. Removed the old app settings page. Added support for multiple devices."
+  },
+  "1.2.0": {
+    "en": "Added new values. Current/ampere, temperature for surrounding and inverter frequency."
   }
 }

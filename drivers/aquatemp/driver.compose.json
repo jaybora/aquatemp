@@ -12,7 +12,10 @@
     "measure_voltage",
     "target_temperature",
     "thermostat_mode",
-    "measure_power"
+    "measure_power",
+    "measure_current",
+    "measure_temperature.surrounding",
+    "measure_frequency"
   ],
   "capabilitiesOptions": {
     "measure_temperature.inlet": {
@@ -34,6 +37,15 @@
       "getable": true,
       "setable": false,
       "icon": "/assets/images/right.svg"
+    },
+    "measure_temperature.surrounding": {
+      "title": { "en": "Surrounding" },
+      "decimals": 1,
+      "min": 0,
+      "max": 50,
+      "step": 0.5,
+      "getable": true,
+      "setable": false
     }
   },
   "platforms": [

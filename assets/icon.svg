@@ -1,11 +1,10 @@
-<svg viewBox="0 0 960 960" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="80">
+<svg viewBox="0 0 960 960" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="60">
 	<!-- Water waves -->
-	<path d="M110 650c48 48 114 48 152 0s114-48 152 0 114 48 152 0 114-48 152 0 114 48 152 0" stroke-linecap="round"/>
-	<path d="M110 800c48 48 114 48 152 0s114-48 152 0 114 48 152 0 114-48 152 0 114 48 152 0" stroke-linecap="round"/>
+	<path d="M110 650c48 48 114 48 152 0s114-48 152 0 114 48 152 0 114-48 152 0 114 48 152 0" stroke-linecap="round" stroke-width="80"/>
+	<path d="M110 800c48 48 114 48 152 0s114-48 152 0 114 48 152 0 114-48 152 0 114 48 152 0" stroke-linecap="round" stroke-width="80"/>
 	<!-- Heat lines -->
-	<path d="M200 300c10 -30 10 -70 0 -100s-10 -70 0 -100" stroke-linecap="round"/>
-	<path d="M400 400c10 -30 10 -70 0 -100s-10 -70 0 -100" stroke-linecap="round"/>
-	<path d="M600 300c10 -30 10 -70 0 -100s-10 -70 0 -100" stroke-linecap="round"/>
-	<path d="M800 400c10 -30 10 -70 0 -100s-10 -70 0 -100" stroke-linecap="round"/>
+	<path d="M200 400c20 -30 30 -90 0 -160s-30 -100 10 -160" stroke-linecap="round"/>
+	<path d="M470 500c20 -30 30 -90 0 -160s-30 -100 10 -160" stroke-linecap="round"/>
+	<path d="M750 400c20 -30 30 -90 0 -160s-30 -100 10 -160" stroke-linecap="round"/>
 
 </svg>
