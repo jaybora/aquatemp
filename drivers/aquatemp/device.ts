@@ -11,6 +11,12 @@ class HeatPumpDevice extends Homey.Device {
    */
   async onInit() {
     this.log('HeatPumpDevice has been initialized');
+
+    if (!this.hasCapability('alarm_pump_supply')) {
+      console.log(`Adding capability alarm_pump_supply to device ${this.getName()}`);
+      await this.addCapability('alarm_pump_supply');
+    }
+
     this.registerCapabilityListener('target_temperature', async value => {
       this.setTemp(value);
     });
@@ -86,8 +92,10 @@ class HeatPumpDevice extends Homey.Device {
     await this.setCapabilityValue('measure_voltage', this.extractValueByCode(result, 'T14')).catch(this.error);
     if (isPowerOn) {
       await this.setCapabilityValue('measure_frequency', this.extractValueByCode(result, 'T06')).catch(this.error);
+      await this.setCapabilityValue('alarm_pump_supply', this.extractValueByCodeAndPosition(result, '2074', 6) === '1').catch(this.error);
     } else {
       await this.setCapabilityValue('measure_frequency', 0).catch(this.error);
+      await this.setCapabilityValue('alarm_pump_supply', false).catch(this.error);
     }
     await this.setCapabilityValue('measure_current', this.extractValueByCode(result, 'T07')).catch(this.error);
     await this.setCapabilityValue('measure_power', this.extractValueByCode(result, 'T14') * this.extractValueByCode(result, 'T07'));
@@ -113,6 +121,14 @@ class HeatPumpDevice extends Homey.Device {
       throw new Error(`Item with code "${code}" not found`);
     }
     return Number(foundItem.value);
+  }
+
+  private extractValueByCodeAndPosition(result: any, code: string, position: number) {
+    const foundItem = result.data.objectResult.find((x: any) => x.code === code);
+    if (!foundItem) {
+      throw new Error(`Item with code "${code}" not found`);
+    }
+    return (foundItem.value as string).charAt(position);
   }
 
   getTargetTemp(hvacMode: string, result: any) {
