@@ -15,7 +15,8 @@
     "measure_power",
     "measure_current",
     "measure_temperature.surrounding",
-    "measure_frequency"
+    "measure_frequency",
+    "alarm_pump_supply"
   ],
   "capabilitiesOptions": {
     "measure_temperature.inlet": {

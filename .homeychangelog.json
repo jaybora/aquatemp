@@ -22,5 +22,8 @@
   },
   "1.2.0": {
     "en": "Added new values. Current/ampere, temperature for surrounding and inverter frequency."
+  },
+  "1.3.0": {
+    "en": "Added alarm for now flow."
   }
 }
