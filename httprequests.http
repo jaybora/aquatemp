@@ -9,11 +9,23 @@ Content-Type: application/json; charset=utf-8
 x-token: Fa+1hjBswfRRCGbmtMEKSyhYjP1RDom2ceBl3jnlWxRfaK1PKBJJ/7ylpdB0fhj9ThAq0toh1iDxP6nFmwY1yQ==
 
 ###
+POST https://cloud.linked-go.com:449/crmservice/api/app/device/getMyAppectDeviceShareDataList
+Content-Type: application/json; charset=utf-8
+x-token: RwgPtvz796JvJCj8X7WQMWA5lU4OacjZHS7XhFebBS46D0Vmsud6J/kvchE8YyP4ThAq0toh1iDxP6nFmwY1yQ==
+
+###
 
 POST https://cloud.linked-go.com:449/crmservice/api/app/device/getDataByCode
 Content-Type: application/json; charset=utf-8
-x-token: hEc2QS6BOyBiL0SaGPEJXaPt97EnB5Z2r/8Rg3iobDLhkkOVBRmG9HF+f7aJr8LHThAq0toh1iDxP6nFmwY1yQ==
+x-token: nI66CTCwID1/T3LCLceaHf7irG+45Ng9hjmga7GTr/ZtWoGPAqBXIutJMi/oCqazThAq0toh1iDxP6nFmwY1yQ==
 
 {"deviceCode":  "289C6E13334C",
   "protocal_codes": ["Power","Mode","Manual-mute","T01","T02","2074","2075","2076","2077","H03","Set_Temp","R08","R09","R10","R11","R01","R02","R03","T03","1158","1159","F17","H02","T04","T05","T06","T07","T12","T14"]
 }
+
+###
+POST https://cloud.linked-go.com:449/crmservice/api/app/device/getFaultDataByDeviceCode
+Content-Type: application/json; charset=utf-8
+x-token: nI66CTCwID1/T3LCLceaHf7irG+45Ng9hjmga7GTr/ZtWoGPAqBXIutJMi/oCqazThAq0toh1iDxP6nFmwY1yQ==
+
+{"deviceCode": "289C6E13334C"}
