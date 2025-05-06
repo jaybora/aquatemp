@@ -82,11 +82,16 @@ class HeatPumpDevice extends Homey.Device {
   }
 
   async setValues(result: any) {
+    const isPowerOn = await this.extractValueByCode(result, 'Power') === 1;
     await this.setCapabilityValue('measure_voltage', this.extractValueByCode(result, 'T14')).catch(this.error);
-    await this.setCapabilityValue('measure_frequency', this.extractValueByCode(result, 'T06')).catch(this.error);
+    if (isPowerOn) {
+      await this.setCapabilityValue('measure_frequency', this.extractValueByCode(result, 'T06')).catch(this.error);
+    } else {
+      await this.setCapabilityValue('measure_frequency', 0).catch(this.error);
+    }
     await this.setCapabilityValue('measure_current', this.extractValueByCode(result, 'T07')).catch(this.error);
     await this.setCapabilityValue('measure_power', this.extractValueByCode(result, 'T14') * this.extractValueByCode(result, 'T07'));
-    await this.setCapabilityValue('onoff', this.extractValueByCode(result, 'Power') === 1).catch(this.error);
+    await this.setCapabilityValue('onoff', isPowerOn).catch(this.error);
     await this.setCapabilityValue('meter_power', (this.extractValueByCode(result, 'T14') * this.extractValueByCode(result, 'T07')) / 1000).catch(this.error);
 
     this.getHvacMode(result);
