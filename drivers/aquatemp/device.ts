@@ -98,7 +98,7 @@ class HeatPumpDevice extends Homey.Device {
       await this.setCapabilityValue('alarm_pump_supply', false).catch(this.error);
     }
     await this.setCapabilityValue('measure_current', this.extractValueByCode(result, 'T07')).catch(this.error);
-    await this.setCapabilityValue('measure_power', this.extractValueByCode(result, 'T14') * this.extractValueByCode(result, 'T07'));
+    await this.setCapabilityValue('measure_power', Math.round(this.extractValueByCode(result, 'T14') * this.extractValueByCode(result, 'T07')));
     await this.setCapabilityValue('onoff', isPowerOn).catch(this.error);
     await this.setCapabilityValue('meter_power', (this.extractValueByCode(result, 'T14') * this.extractValueByCode(result, 'T07')) / 1000).catch(this.error);
 
