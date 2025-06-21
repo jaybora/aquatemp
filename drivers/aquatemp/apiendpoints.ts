@@ -5,5 +5,7 @@ export class ApiEndpoints {
     public static readonly DEVICE_LIST = `${this.BASE_URL}/app/device/deviceList`;
     public static readonly GET_DATA_BY_CODE = `${this.BASE_URL}/app/device/getDataByCode`;
     public static readonly CONTROL = `${this.BASE_URL}/app/device/control`;
+    public static readonly USER_INFO = `${this.BASE_URL}/app/user/getUserInfo`;
+    public static readonly SHARED_DEVICE_LIST = `${this.BASE_URL}/app/device/getMyAppectDeviceShareDataList`;
 
 }

@@ -62,6 +62,17 @@ export class AquatempAPI {
   }
 
   public async getDeviceList(): Promise<string[]> {
+    const result = await this.getOwnDevices();
+
+    //TODO: Get list of devices shared with user by first getting userId from getUserInfo endpoint
+    //and then use the userId as payload in fetching list of shared devices
+
+
+    const ownDevices: string[] = result.data.objectResult.map((x: any) => x.device_code);
+    return ownDevices;
+  }
+
+  private async getOwnDevices() {
     const result = await axios({
       method: 'post',
       url: ApiEndpoints.DEVICE_LIST,
@@ -73,7 +84,7 @@ export class AquatempAPI {
     if (!result.data.isReusltSuc) {
       throw new Error('Getting device list from aquatemp server failed.');
     }
-    return result.data.objectResult.map((x: any) => x.device_code);
+    return result;
   }
 
   public async getDeviceData(deviceCode: string): Promise<any> {
