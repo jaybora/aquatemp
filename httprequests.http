@@ -29,7 +29,7 @@ x-token: L1OyWZeYz+/d2Gs2QGkB8PUShsdFrqOcKgoJLIgS1W3JKtlARFQ5IoT+mFkVYee9DXJgilQ
 
 POST https://cloud.linked-go.com:449/crmservice/api/app/device/getDataByCode
 Content-Type: application/json; charset=utf-8
-x-token: L1OyWZeYz+/d2Gs2QGkB8PUShsdFrqOcKgoJLIgS1W3JKtlARFQ5IoT+mFkVYee9DXJgilQKyZn2ZlTIxD/MgQ==
+x-token: RUns3Q+MmedP6gJXYJAKfH2DxglW0cUoMYl/2pdKvhdiQBp4jUch7mOzpDNIRPVwDXJgilQKyZn2ZlTIxD/MgQ==
 
 {"deviceCode":  "289C6E13334C",
   "protocal_codes": ["Power","Mode","Manual-mute","T01","T02","2074","2075","2076","2077","H03","Set_Temp","R08","R09","R10","R11","R01","R02","R03","T03","1158","1159","F17","H02","T04","T05","T06","T07","T12","T14"]

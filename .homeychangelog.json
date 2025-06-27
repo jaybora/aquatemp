@@ -28,5 +28,8 @@
   },
   "1.4.0": {
     "en": "Power now reports in integers"
+  },
+  "1.5.0": {
+    "en": "Control silent mode"
   }
 }

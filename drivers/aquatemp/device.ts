@@ -23,6 +23,9 @@ class HeatPumpDevice extends Homey.Device {
     this.registerCapabilityListener('onoff', async value => {
       this.setOnOff(value);
     });
+    this.registerCapabilityListener('silent_mode', async value => {
+      await this.setSilentOnOff(value);
+    });
     this.registerCapabilityListener('thermostat_mode', async value => {
       this.setHvacMode(value);
     });
@@ -88,6 +91,9 @@ class HeatPumpDevice extends Homey.Device {
   }
 
   async setValues(result: any) {
+    if (!this.hasCapability('silent_mode')) {
+      await this.addCapability('silent_mode');
+    }
     const isPowerOn = await this.extractValueByCode(result, 'Power') === 1;
     await this.setCapabilityValue('measure_voltage', this.extractValueByCode(result, 'T14')).catch(this.error);
     if (isPowerOn) {
@@ -101,6 +107,7 @@ class HeatPumpDevice extends Homey.Device {
     await this.setCapabilityValue('measure_power', Math.round(this.extractValueByCode(result, 'T14') * this.extractValueByCode(result, 'T07')));
     await this.setCapabilityValue('onoff', isPowerOn).catch(this.error);
     await this.setCapabilityValue('meter_power', (this.extractValueByCode(result, 'T14') * this.extractValueByCode(result, 'T07')) / 1000).catch(this.error);
+    await this.setCapabilityValue('silent_mode', this.extractValueByCode(result, 'Manual-mute') === 1).catch(this.error);
 
     this.getHvacMode(result);
     await this.setCapabilityValue('thermostat_mode', this.HVAC_MODE);
@@ -160,6 +167,17 @@ class HeatPumpDevice extends Homey.Device {
       await this.setCapabilityValue('thermostat_mode', this.HVAC_MODE);
       this.log(`Turned to ${this.HVAC_MODE}`);
     }
+  }
+
+  async setSilentOnOff(isTurnOn: boolean) {
+    let data = {};
+    if (isTurnOn) {
+      data = { param: [{ device_code: this.getDeviceCode(), protocol_code: 'Manual-mute', value: 1 }] };
+    } else {
+      data = { param: [{ device_code: this.getDeviceCode(), protocol_code: 'Manual-mute', value: 0 }] };
+    }
+    this.log(`Setting silent mode to: ${JSON.stringify(data)}`);
+    await this.updateDeviceData(data);
   }
 
   private updateDeviceData(data: {}) {

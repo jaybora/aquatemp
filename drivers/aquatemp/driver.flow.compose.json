@@ -1,0 +1,119 @@
+{
+  "actions": [
+    {
+      "id": "set_silent_mode",
+      "title": {
+        "en": "Set Silent Mode",
+        "nl": "Stel Stille Modus in",
+        "de": "Leiser Modus einstellen",
+        "fr": "Définir Mode Silencieux",
+        "it": "Imposta Modalità Silenziosa",
+        "es": "Establecer Modo Silencioso",
+        "da": "Indstil Stille tilstand",
+        "no": "Sett Stillemodus",
+        "sv": "Ställ in Tyst läge",
+        "fi": "Aseta Hiljainen Tila",
+        "pl": "Ustaw Tryb Cichy",
+        "cs": "Nastavit Tichý Režim",
+        "sk": "Nastaviť Tichý Režim",
+        "hu": "Csendes Üzemmód beállítása",
+        "pt": "Definir Modo Silencioso",
+        "ro": "Setare Mod Silențios"
+      },
+      "args": [
+        {
+          "name": "silent_mode",
+          "type": "checkbox",
+          "values": [
+            {
+              "id": "true",
+              "title": {
+                "en": "On",
+                "nl": "Aan",
+                "de": "An",
+                "fr": "Activé",
+                "it": "Attiva",
+                "es": "Activado",
+                "da": "Til",
+                "no": "På",
+                "sv": "På",
+                "fi": "Päällä",
+                "pl": "Włączony",
+                "cs": "Zapnutý",
+                "sk": "Zapnutý",
+                "hu": "Bekapcsolva",
+                "pt": "Ativado",
+                "ro": "Pornit"
+              }
+            },
+            {
+              "id": "false",
+              "title": {
+                "en": "Off",
+                "nl": "Uit",
+                "de": "Aus",
+                "fr": "Désactivé",
+                "it": "Disattivata",
+                "es": "Desactivado",
+                "da": "Fra",
+                "no": "Av",
+                "sv": "Av",
+                "fi": "Pois",
+                "pl": "Wyłączony",
+                "cs": "Vypnutý",
+                "sk": "Vypnutý",
+                "hu": "Kikapcsolva",
+                "pt": "Desativado",
+                "ro": "Oprit"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "turn_silent_mode_on",
+      "title": {
+        "en": "Turn Silent Mode on",
+        "nl": "Zet Stille Modus aan",
+        "de": "Leiser Modus einschalten",
+        "fr": "Activer Mode Silencieux",
+        "it": "Attiva Modalità Silenziosa",
+        "es": "Activar Modo Silencioso",
+        "da": "Tænd for Stille tilstand",
+        "no": "Slå på Stillemodus",
+        "sv": "Sätt på Tyst läge",
+        "fi": "Kytke Hiljainen Tila päälle",
+        "pl": "Włącz Tryb Cichy",
+        "cs": "Zapnout Tichý Režim",
+        "sk": "Zapnúť Tichý Režim",
+        "hu": "Csendes Üzemmód bekapcsolása",
+        "pt": "Ativar Modo Silencioso",
+        "ro": "Pornește Mod Silențios"
+      },
+      "args": []
+    },
+    {
+      "id": "turn_silent_mode_off",
+      "title": {
+        "en": "Turn Silent Mode off",
+        "nl": "Zet Stille Modus uit",
+        "de": "Leiser Modus ausschalten",
+        "fr": "Désactiver Mode Silencieux",
+        "it": "Disattiva Modalità Silenziosa",
+        "es": "Desactivar Modo Silencioso",
+        "da": "Sluk for Stille tilstand",
+        "no": "Slå av Stillemodus",
+        "sv": "Stäng av Tyst läge",
+        "fi": "Kytke Hiljainen Tila pois",
+        "pl": "Wyłącz Tryb Cichy",
+        "cs": "Vypnout Tichý Režim",
+        "sk": "Vypnúť Tichý Režim",
+        "hu": "Csendes Üzemmód kikapcsolása",
+        "pt": "Desativar Modo Silencioso",
+        "ro": "Oprește Mod Silențios"
+      },
+      "args": []
+    }
+  ]
+}

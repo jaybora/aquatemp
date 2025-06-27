@@ -1,19 +1,41 @@
 import Homey from 'homey';
-import {AquatempAPI} from "./aquatempAPI";
+import { AquatempAPI } from './aquatempAPI';
 
 class MyDriver extends Homey.Driver {
 
   /**
-   * onInit is called when the driver is initialized.
-   */
+     * onInit is called when the driver is initialized.
+     */
   async onInit() {
     this.log('Aquatemp Driver has been initialized');
+
+    this.homey.flow.getActionCard('set_silent_mode')
+      .registerRunListener(async (args, state) => {
+        this.log(`Setting silent mode to: ${args.silent_mode}`);
+        await args.device.setSilentOnOff(args.silent_mode);
+        return args.device.setCapabilityValue('silent_mode', args.silent_mode);
+      });
+
+    this.homey.flow.getActionCard('turn_silent_mode_on')
+      .registerRunListener(async (args, state) => {
+        this.log('Setting silent mode to on');
+        await args.device.setSilentOnOff(true);
+        return args.device.setCapabilityValue('silent_mode', true);
+      });
+
+    // Register action for turning silent mode off
+    this.homey.flow.getActionCard('turn_silent_mode_off')
+      .registerRunListener(async (args, state) => {
+        this.log('Setting silent mode to off');
+        await args.device.setSilentOnOff(false);
+        return args.device.setCapabilityValue('silent_mode', false);
+      });
   }
 
-  async onPair(session : any) {
+  async onPair(session: any) {
     let username: string | null = '';
     let password: string | null = '';
-    session.setHandler('login', async (data : any) => {
+    session.setHandler('login', async (data: any) => {
       username = data.username as string | null;
       password = data.password as string | null;
       const api = new AquatempAPI(username, password);
