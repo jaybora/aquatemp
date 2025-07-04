@@ -31,5 +31,11 @@
   },
   "1.5.0": {
     "en": "Control silent mode"
+  },
+  "1.6.0": {
+    "en": "Updated translations on labels. Now released on the original app id, so we can go out of test phase (and make a public release)"
+  },
+  "1.7.0": {
+    "en": "Updated text on app store. Fixes crashes when updating from very old version to newest version"
   }
 }

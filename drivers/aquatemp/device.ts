@@ -12,9 +12,32 @@ class HeatPumpDevice extends Homey.Device {
   async onInit() {
     this.log('HeatPumpDevice has been initialized');
 
+    if (!this.hasCapability('silent_mode')) {
+      console.log(`Adding capability silent_mode to device ${this.getName()}`);
+      await this.addCapability('silent_mode');
+    }
     if (!this.hasCapability('alarm_pump_supply')) {
       console.log(`Adding capability alarm_pump_supply to device ${this.getName()}`);
       await this.addCapability('alarm_pump_supply');
+    }
+
+    this.log('Removing old outlet capability');
+    if (this.hasCapability('outlet')) {
+      await this.removeCapability('outlet');
+    }
+
+    this.log('Adding new measure_temperature.outlet capability');
+    if (!this.hasCapability('measure_temperature.inlet')) {
+      await this.addCapability('measure_temperature.inlet');
+    }
+
+    this.log('Removing old inlet capability');
+    if (this.hasCapability('inlet')) {
+      await this.removeCapability('inlet');
+    }
+    this.log('Adding new measure_temperature.inlet capability');
+    if (!this.hasCapability('measure_temperature.inlet')) {
+      await this.addCapability('measure_temperature.inlet');
     }
 
     this.registerCapabilityListener('target_temperature', async value => {
@@ -91,9 +114,6 @@ class HeatPumpDevice extends Homey.Device {
   }
 
   async setValues(result: any) {
-    if (!this.hasCapability('silent_mode')) {
-      await this.addCapability('silent_mode');
-    }
     const isPowerOn = await this.extractValueByCode(result, 'Power') === 1;
     await this.setCapabilityValue('measure_voltage', this.extractValueByCode(result, 'T14')).catch(this.error);
     if (isPowerOn) {
@@ -133,6 +153,7 @@ class HeatPumpDevice extends Homey.Device {
   private extractValueByCodeAndPosition(result: any, code: string, position: number) {
     const foundItem = result.data.objectResult.find((x: any) => x.code === code);
     if (!foundItem) {
+      this.error();
       throw new Error(`Item with code "${code}" not found`);
     }
     return (foundItem.value as string).charAt(position);
