@@ -144,7 +144,7 @@ class HeatPumpDevice extends Homey.Device {
 
   private extractValueByCode(result: any, code: string) {
     const foundItem = result.data.objectResult.find((x: any) => x.code === code);
-    if (!foundItem) {
+    if (!foundItem) {this.error();
       throw new Error(`Item with code "${code}" not found`);
     }
     return Number(foundItem.value);
