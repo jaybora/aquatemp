@@ -1,5 +1,5 @@
 import Homey from 'homey';
-import { AquatempAPI } from './aquatempAPI';
+import { ApiRequestError, AquatempAPI, AuthenticationError } from './aquatempAPI';
 
 class MyDriver extends Homey.Driver {
 
@@ -39,7 +39,17 @@ class MyDriver extends Homey.Driver {
       username = data.username as string | null;
       password = data.password as string | null;
       const api = new AquatempAPI(username, password);
-      await api.getToken();
+      this.log(`Trying to login in with username: ${username} for adding device...`);
+      try {
+        await api.getToken();
+      } catch (error) {
+        if (error instanceof AuthenticationError) {
+          this.log(`Could not login in with username: ${username}: '${error.message}' for adding device`);
+          return false;
+        }
+        this.error(`Could not login in with username: ${username}: '${error}' for adding device`);
+        throw error;
+      }
 
       // return true to continue adding the device if the login succeeded
       // return false to indicate to the user the login attempt failed

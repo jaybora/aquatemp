@@ -1,7 +1,7 @@
 {
   "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
   "id": "com.aquatemp.gullbergjansson",
-  "version": "1.7.1",
+  "version": "1.8.0",
   "compatibility": ">=12.2.0",
   "sdk": 3,
   "platforms": [
@@ -202,6 +202,8 @@
         "measure_temperature",
         "measure_temperature.inlet",
         "measure_temperature.outlet",
+        "measure_temperature.exhaust",
+        "measure_temperature.coil",
         "onoff",
         "measure_voltage",
         "target_temperature",
@@ -211,7 +213,8 @@
         "measure_temperature.surrounding",
         "measure_frequency",
         "alarm_pump_supply",
-        "silent_mode"
+        "silent_mode",
+        "fan_speed"
       ],
       "capabilitiesOptions": {
         "measure_temperature.inlet": {
@@ -294,6 +297,64 @@
           "min": 0,
           "max": 50,
           "step": 0.5,
+          "getable": true,
+          "setable": false
+        },
+        "measure_temperature.exhaust": {
+          "title": {
+            "en": "Exhaust",
+            "de": "Abluft",
+            "fr": "Échappement",
+            "es": "Escape",
+            "it": "Scarico",
+            "nl": "Uitlaat",
+            "sv": "Avgas",
+            "no": "Eksos",
+            "da": "Kondensator",
+            "fi": "Poistoilma",
+            "pl": "Wylot",
+            "pt": "Exaustão",
+            "cs": "Výfuk",
+            "hu": "Kipufogó",
+            "ro": "Evacuare",
+            "el": "Εξαγωγή",
+            "bg": "Изпускателна"
+          },
+          "decimals": 1,
+          "min": 0,
+          "max": 50,
+          "step": 0.5,
+          "getable": true,
+          "setable": false
+        },
+        "measure_temperature.coil": {
+          "title": {
+            "en": "Evaporator",
+            "de": "Verdampfer",
+            "fr": "Évaporateur",
+            "es": "Evaporador",
+            "it": "Evaporatore",
+            "nl": "Verdamper",
+            "sv": "Förångare",
+            "no": "Fordamper",
+            "da": "Fordamper",
+            "fi": "Höyrystin",
+            "pl": "Parownik",
+            "pt": "Evaporador",
+            "cs": "Výparník",
+            "hu": "Párologtató",
+            "ro": "Evaporator",
+            "el": "Εξατμιστής",
+            "bg": "Изпарител"
+          },
+          "decimals": 1,
+          "min": 0,
+          "max": 50,
+          "step": 0.5,
+          "getable": true,
+          "setable": false
+        },
+        "fan_speed": {
           "getable": true,
           "setable": false
         }
@@ -426,6 +487,56 @@
     }
   ],
   "capabilities": {
+    "fan_speed": {
+      "type": "number",
+      "title": {
+        "en": "Fan Speed",
+        "nl": "Ventilatorsnelheid",
+        "da": "Ventilatorhastighed",
+        "it": "Velocità della ventola",
+        "ko": "팬 속도",
+        "no": "Viftehastighet",
+        "pl": "Prędkość wentylatora",
+        "ru": "Скорость вентилятора",
+        "sv": "Fläkthastighet",
+        "es": "Velocidad del ventilador",
+        "fr": "Vitesse de ventilation"
+      },
+      "units": {
+        "en": "rpm",
+        "da": "rpm",
+        "it": "rpm",
+        "ko": "rpm",
+        "nl": "rpm",
+        "no": "rpm",
+        "pl": "rpm",
+        "ru": "rpm",
+        "sv": "rpm",
+        "es": "rpm",
+        "fr": "rpm"
+      },
+      "desc": {
+        "en": "The fan speed.",
+        "nl": "De ventilatorsnelheid.",
+        "da": "Ventilatorhastigheden.",
+        "it": "La velocità della ventola.",
+        "no": "Viftehastigheten.",
+        "pl": "Prędkość wentylatora.",
+        "sv": "Fläkthastigheten.",
+        "es": "La velocidad del ventilador.",
+        "fr": "Vitesse de ventilation."
+      },
+      "insights": true,
+      "chartType": "spline",
+      "min": 0,
+      "max": 3000,
+      "decimals": 0,
+      "color": "#0091FF",
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "minCompatibility": "12.2.0"
+    },
     "silent_mode": {
       "type": "boolean",
       "title": {

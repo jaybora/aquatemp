@@ -1,5 +1,5 @@
 import Homey from 'homey';
-import { AquatempAPI } from './aquatempAPI';
+import {ApiRequestError, AquatempAPI, AuthenticationError} from './aquatempAPI';
 
 class HeatPumpDevice extends Homey.Device {
 
@@ -21,23 +21,35 @@ class HeatPumpDevice extends Homey.Device {
       await this.addCapability('alarm_pump_supply');
     }
 
-    this.log('Removing old outlet capability');
     if (this.hasCapability('outlet')) {
+      this.log('Removing old outlet capability');
       await this.removeCapability('outlet');
     }
 
-    this.log('Adding new measure_temperature.outlet capability');
     if (!this.hasCapability('measure_temperature.inlet')) {
+      this.log('Adding new measure_temperature.outlet capability');
       await this.addCapability('measure_temperature.inlet');
     }
 
-    this.log('Removing old inlet capability');
     if (this.hasCapability('inlet')) {
+      this.log('Removing old inlet capability');
       await this.removeCapability('inlet');
     }
-    this.log('Adding new measure_temperature.inlet capability');
     if (!this.hasCapability('measure_temperature.inlet')) {
+      this.log('Adding new measure_temperature.inlet capability');
       await this.addCapability('measure_temperature.inlet');
+    }
+    if (!this.hasCapability('measure_temperature.exhaust')) {
+      this.log('Adding new measure_temperature.exhaust capability');
+      await this.addCapability('measure_temperature.exhaust');
+    }
+    if (!this.hasCapability('measure_temperature.coil')) {
+      this.log('Adding new measure_temperature.coil capability');
+      await this.addCapability('measure_temperature.coil');
+    }
+    if (!this.hasCapability('fan_speed')) {
+      this.log('Adding new fan_speed capability');
+      await this.addCapability('fan_speed');
     }
 
     this.registerCapabilityListener('target_temperature', async value => {
@@ -52,12 +64,11 @@ class HeatPumpDevice extends Homey.Device {
     this.registerCapabilityListener('thermostat_mode', async value => {
       this.setHvacMode(value);
     });
-    const result = await this.getFreshData();
-    this.setValues(result);
+
+    await this.updateData();
 
     setInterval(async () => {
-      const result = await this.getFreshData();
-      this.setValues(result);
+      await this.updateData();
     }, 30000);
   }
 
@@ -76,9 +87,8 @@ class HeatPumpDevice extends Homey.Device {
    * @param {string[]} event.changedKeys An array of keys changed since the previous version
    * @returns {Promise<string|void>} return a custom message that will be displayed
    */
-  async onSettings({ oldSettings: {}, newSettings: {}, changedKeys: {} }): Promise<string|void> {
-    const result = await this.getFreshData();
-    this.setValues(result);
+  async onSettings({ oldSettings: {}, newSettings: {}, changedKeys: {} }): Promise<string | void> {
+    await this.updateData();
   }
 
   /**
@@ -102,11 +112,32 @@ class HeatPumpDevice extends Homey.Device {
     }
   }
 
-  async getFreshData(): Promise<any> {
+  async updateData() {
     const api = new AquatempAPI(this.getSetting('username'), this.getSetting('password'));
     const deviceCode = this.getDeviceCode();
     this.log('Fetching device data for device code', deviceCode);
-    return api.getDeviceData(deviceCode);
+    try {
+      const deviceData = await api.getDeviceData(deviceCode);
+      await this.setAvailable();
+      await this.setValues(deviceData);
+    } catch (e) {
+      if (e instanceof AuthenticationError) {
+        this.error(`Error fetching data from server: AuthenticationError - ${e.message}`);
+        await this.setUnavailable('Cannot login. Update username and password in the app settings');
+      } else if (e instanceof ApiRequestError) {
+        this.error(`Error fetching data from server: ApiRequestError - ${e.message}`);
+        await this.setUnavailable('Cannot connect to server. '
+          + 'Check homeys connection to internet, or try restarting the app, or the homey');
+      } else if (e instanceof Error) {
+        this.error(`Error fetching data from server: ${e.message}`);
+        await this.setUnavailable('Cannot connect to server: '
+          + `${e.message}`);
+        throw e;
+      } else {
+        // Something throw something thats not an error. Let the app crash then
+        throw e;
+      }
+    }
   }
 
   private getDeviceCode() {
@@ -114,6 +145,7 @@ class HeatPumpDevice extends Homey.Device {
   }
 
   async setValues(result: any) {
+    this.log('Values from server: ', result);
     const isPowerOn = await this.extractValueByCode(result, 'Power') === 1;
     await this.setCapabilityValue('measure_voltage', this.extractValueByCode(result, 'T14')).catch(this.error);
     if (isPowerOn) {
@@ -139,19 +171,23 @@ class HeatPumpDevice extends Homey.Device {
     await this.setCapabilityValue('measure_temperature.outlet', this.extractValueByCode(result, 'T03')).catch(this.error);
     await this.setCapabilityValue('measure_temperature.surrounding', this.extractValueByCode(result, 'T05')).catch(this.error);
     await this.setCapabilityValue('measure_temperature', this.extractValueByCode(result, 'T02')).catch(this.error);
+    await this.setCapabilityValue('measure_temperature.coil', this.extractValueByCode(result, 'T04')).catch(this.error);
+    await this.setCapabilityValue('measure_temperature.exhaust', this.extractValueByCode(result, 'T06')).catch(this.error);
+    await this.setCapabilityValue('fan_speed', this.extractValueByCode(result, 'T12')).catch(this.error);
     this.log('Done updating values');
   }
 
   private extractValueByCode(result: any, code: string) {
-    const foundItem = result.data.objectResult.find((x: any) => x.code === code);
-    if (!foundItem) {this.error();
+    const foundItem = result.find((x: any) => x.code === code);
+    if (!foundItem) {
+      this.error();
       throw new Error(`Item with code "${code}" not found`);
     }
     return Number(foundItem.value);
   }
 
   private extractValueByCodeAndPosition(result: any, code: string, position: number) {
-    const foundItem = result.data.objectResult.find((x: any) => x.code === code);
+    const foundItem = result.find((x: any) => x.code === code);
     if (!foundItem) {
       this.error();
       throw new Error(`Item with code "${code}" not found`);
@@ -163,13 +199,13 @@ class HeatPumpDevice extends Homey.Device {
     let targetTemp = 0;
     switch (hvacMode) {
       case 'cool':
-        targetTemp = Number(result.data.objectResult.find((x: any) => x.code === 'R01').value) > 35 ? 35 : (Number(result.data.objectResult.find((x: any) => x.code === 'R01').value));
+        targetTemp = Number(result.find((x: any) => x.code === 'R01').value) > 35 ? 35 : (Number(result.find((x: any) => x.code === 'R01').value));
         break;
       case 'auto':
-        targetTemp = Number(result.data.objectResult.find((x: any) => x.code === 'R03').value) > 35 ? 35 : (Number(result.data.objectResult.find((x: any) => x.code === 'R03').value));
+        targetTemp = Number(result.find((x: any) => x.code === 'R03').value) > 35 ? 35 : (Number(result.find((x: any) => x.code === 'R03').value));
         break;
       default:
-        targetTemp = Number(result.data.objectResult.find((x: any) => x.code === 'R02').value) > 35 ? 35 : (Number(result.data.objectResult.find((x: any) => x.code === 'R02').value));
+        targetTemp = Number(result.find((x: any) => x.code === 'R02').value) > 35 ? 35 : (Number(result.find((x: any) => x.code === 'R02').value));
         break;
     }
     return targetTemp;
@@ -202,16 +238,15 @@ class HeatPumpDevice extends Homey.Device {
   }
 
   private updateDeviceData(data: {}) {
-    return new AquatempAPI(this.getSetting('username'), this.getSetting('password')).setDeviceData(
-      this.getDeviceCode(),
-      data,
-    );
+    this.log(`Updating device data: ${JSON.stringify(data)}`);
+    return new AquatempAPI(this.getSetting('username'), this.getSetting('password'))
+      .setDeviceData(data);
   }
 
   getHvacMode(result: any) {
     let mode = '';
-    const modeString = result.data.objectResult.find((x: any) => x.code === 'Mode');
-    const power = result.data.objectResult.find((x: any) => x.code === 'Power');
+    const modeString = result.find((x: any) => x.code === 'Mode');
+    const power = result.find((x: any) => x.code === 'Power');
     switch (modeString.value) {
       case '0':
         mode = 'cool';
@@ -292,18 +327,18 @@ class HeatPumpDevice extends Homey.Device {
     }
     const data = {
       param:
-          [
-            {
-              device_code: this.getDeviceCode(),
-              protocol_code: mode,
-              value: desiredTemp,
-            },
-            {
-              device_code: this.getDeviceCode(),
-              protocol_code: 'Set_Temp',
-              value: desiredTemp,
-            },
-          ],
+        [
+          {
+            device_code: this.getDeviceCode(),
+            protocol_code: mode,
+            value: desiredTemp,
+          },
+          {
+            device_code: this.getDeviceCode(),
+            protocol_code: 'Set_Temp',
+            value: desiredTemp,
+          },
+        ],
     };
     await this.updateDeviceData(data);
   }

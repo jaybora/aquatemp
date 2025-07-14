@@ -40,5 +40,8 @@
   },
   "1.7.2": {
     "en": "Updated text on app store."
+  },
+  "1.8.0": {
+    "en": "Added temperature for exhaust and evaporator. Added fan speed. Better error handling."
   }
 }

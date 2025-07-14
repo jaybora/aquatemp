@@ -24,6 +24,8 @@
     "measure_temperature",
     "measure_temperature.inlet",
     "measure_temperature.outlet",
+    "measure_temperature.exhaust",
+    "measure_temperature.coil",
     "onoff",
     "measure_voltage",
     "target_temperature",
@@ -33,7 +35,8 @@
     "measure_temperature.surrounding",
     "measure_frequency",
     "alarm_pump_supply",
-    "silent_mode"
+    "silent_mode",
+    "fan_speed"
   ],
   "capabilitiesOptions": {
     "measure_temperature.inlet": {
@@ -116,6 +119,65 @@
       "min": 0,
       "max": 50,
       "step": 0.5,
+      "getable": true,
+      "setable": false
+    },
+    "measure_temperature.exhaust": {
+      "title": {
+        "en": "Exhaust",
+        "de": "Abluft",
+        "fr": "Échappement",
+        "es": "Escape",
+        "it": "Scarico",
+        "nl": "Uitlaat",
+        "sv": "Avgas",
+        "no": "Eksos",
+        "da": "Kondensator",
+        "fi": "Poistoilma",
+        "pl": "Wylot",
+        "pt": "Exaustão",
+        "cs": "Výfuk",
+        "hu": "Kipufogó",
+        "ro": "Evacuare",
+        "el": "Εξαγωγή",
+        "bg": "Изпускателна"
+
+      },
+      "decimals": 1,
+      "min": 0,
+      "max": 50,
+      "step": 0.5,
+      "getable": true,
+      "setable": false
+    },
+    "measure_temperature.coil": {
+      "title": {
+        "en": "Evaporator",
+        "de": "Verdampfer",
+        "fr": "Évaporateur",
+        "es": "Evaporador",
+        "it": "Evaporatore",
+        "nl": "Verdamper",
+        "sv": "Förångare",
+        "no": "Fordamper",
+        "da": "Fordamper",
+        "fi": "Höyrystin",
+        "pl": "Parownik",
+        "pt": "Evaporador",
+        "cs": "Výparník",
+        "hu": "Párologtató",
+        "ro": "Evaporator",
+        "el": "Εξατμιστής",
+        "bg": "Изпарител"
+      },
+      "decimals": 1,
+      "min": 0,
+      "max": 50,
+      "step": 0.5,
+      "getable": true,
+      "setable": false
+    },
+    "fan_speed": {
       "getable": true,
       "setable": false
     }

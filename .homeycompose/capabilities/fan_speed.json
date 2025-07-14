@@ -1,0 +1,90 @@
+{
+  "type": "number",
+  "title": {
+    "en": "Fan Speed",
+    "nl": "Ventilatorsnelheid",
+    "da": "Ventilatorhastighed",
+    "it": "Velocità della ventola",
+    "ko": "팬 속도",
+    "no": "Viftehastighet",
+    "pl": "Prędkość wentylatora",
+    "ru": "Скорость вентилятора",
+    "sv": "Fläkthastighet",
+    "es": "Velocidad del ventilador",
+    "fr": "Vitesse de ventilation"
+  },
+  "units": {
+    "en": "rpm",
+    "da": "rpm",
+    "it": "rpm",
+    "ko": "rpm",
+    "nl": "rpm",
+    "no": "rpm",
+    "pl": "rpm",
+    "ru": "rpm",
+    "sv": "rpm",
+    "es": "rpm",
+    "fr": "rpm"
+  },
+  "desc": {
+    "en": "The fan speed.",
+    "nl": "De ventilatorsnelheid.",
+    "da": "Ventilatorhastigheden.",
+    "it": "La velocità della ventola.",
+    "no": "Viftehastigheten.",
+    "pl": "Prędkość wentylatora.",
+    "sv": "Fläkthastigheten.",
+    "es": "La velocidad del ventilador.",
+    "fr": "Vitesse de ventilation."
+  },
+  "insights": true,
+  "chartType": "spline",
+  "min": 0,
+  "max": 3000,
+  "decimals": 0,
+  "color": "#0091FF",
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor",
+  "$flow": {
+    "triggers": [
+      {
+        "id": "fan_speed_changed",
+        "title": {
+          "en": "The fan speed changed",
+          "nl": "De ventilatorsnelheid is veranderd",
+          "da": "Ventilatorhastigheden ændrede sig",
+          "it": "La velocità della ventola è cambiata",
+          "ko": "팬 속도가 변경되면",
+          "no": "Viftehastigheten ble endret",
+          "pl": "Prędkość wentylatora zmieniła się",
+          "ru": "Скорость вентилятора изменена",
+          "sv": "Fläkthastigheten ändrades",
+          "es": "La velocidad del ventilador ha cambiado",
+          "fr": "La vitesse de ventilation a changé"
+        },
+        "tokens": [
+          {
+            "name": "fan_speed",
+            "title": {
+              "en": "Fan Speed",
+              "nl": "Ventilatorsnelheid",
+              "da": "Ventilatorhastighed",
+              "it": "Velocità della ventola",
+              "ko": "팬 속도",
+              "no": "Viftehastighet",
+              "pl": "Prędkość wentylatora",
+              "ru": "Скорость вентилятора",
+              "sv": "Fläkthastighet",
+              "es": "Velocidad del ventilador",
+              "fr": "Vitesse de ventilation"
+            },
+            "type": "number",
+            "example": 0.5
+          }
+        ]
+      }
+    ]
+  },
+  "minCompatibility": "12.2.0"
+}
