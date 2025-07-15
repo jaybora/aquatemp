@@ -322,7 +322,7 @@
           },
           "decimals": 1,
           "min": 0,
-          "max": 50,
+          "max": 100,
           "step": 0.5,
           "getable": true,
           "setable": false
@@ -598,6 +598,94 @@
       "insights": true,
       "uiComponent": "toggle",
       "icon": "/assets/volume_mute.svg"
+    },
+    "thermostat_mode": {
+      "type": "enum",
+      "title": {
+        "en": "Thermostat mode",
+        "nl": "Thermostaatmodus",
+        "de": "Thermostat-Modus",
+        "fr": "Mode thermostat",
+        "it": "Modalità termostato",
+        "sv": "Termostatläge",
+        "no": "Termostatmodus",
+        "es": "Modo del termostato",
+        "da": "Termostattilstand",
+        "ru": "Режим термостата",
+        "pl": "Tryb termostatu",
+        "ko": "온도조절기 모드"
+      },
+      "desc": {
+        "en": "Mode of the thermostat",
+        "nl": "Modus van de thermostaat",
+        "de": "Modus des Thermostates",
+        "fr": "Mode du thermostat",
+        "it": "Modalità del termostato",
+        "sv": "Läge för termostaten",
+        "no": "Modus for termostaten",
+        "es": "Modo del termostato",
+        "da": "Tilstand for termostat",
+        "ru": "Режим термостата",
+        "pl": "Tryb termostatu",
+        "ko": "온도조절기의 모드"
+      },
+      "values": [
+        {
+          "id": "auto",
+          "title": {
+            "en": "Automatic",
+            "nl": "Automatisch",
+            "de": "Automatisch",
+            "fr": "Automatique",
+            "it": "Automatica",
+            "sv": "Automatiskt",
+            "no": "Automatisk",
+            "es": "Automático",
+            "da": "Automatisk",
+            "ru": "Автоматически",
+            "pl": "Automatyczny",
+            "ko": "자동"
+          }
+        },
+        {
+          "id": "heat",
+          "title": {
+            "en": "Heat",
+            "nl": "Verhitten",
+            "de": "Heizen",
+            "fr": "Chauffer",
+            "it": "Calore",
+            "sv": "Värme",
+            "no": "Varme",
+            "es": "Calentar",
+            "da": "Opvarm",
+            "ru": "Обогрев",
+            "pl": "Ogrzewanie",
+            "ko": "난방"
+          }
+        },
+        {
+          "id": "cool",
+          "title": {
+            "en": "Cool",
+            "nl": "Koelen",
+            "de": "Kühlen",
+            "fr": "Refroidir",
+            "it": "Raffreddamento",
+            "sv": "Kyla",
+            "no": "Avkjøle",
+            "es": "Enfriar",
+            "da": "Køl ned",
+            "ru": "Охлаждение",
+            "pl": "Chłodzenie",
+            "ko": "냉방"
+          }
+        }
+      ],
+      "color": "#FA6400",
+      "getable": true,
+      "setable": true,
+      "uiComponent": "picker"
     }
   }
 }
