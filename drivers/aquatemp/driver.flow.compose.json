@@ -121,15 +121,15 @@
         "en": "Set the mode",
         "nl": "Stel de modus in",
         "de": "Modus setzen",
-        "fr": "DÃ©finir le mode",
-        "it": "Imposta la modalitÃ ",
-        "sv": "StÃ¤ll in lÃ¤get",
+        "fr": "Définir le mode",
+        "it": "Imposta la modalità",
+        "sv": "Ställ in läget",
         "no": "Innstill modusen",
         "es": "Configurar el modo",
         "da": "Indstil tilstanden",
-        "ru": "Ð£ÑÑ‚Ð°Ð½Ð¾Ð²Ð¸Ñ‚ÑŒ Ñ€ÐµÐ¶Ð¸Ð¼",
+        "ru": "Установить режим",
         "pl": "Ustaw tryb",
-        "ko": "ëª¨ë“œ ì„¤ì •"
+        "ko": "모드 설정"
       },
       "args": [
         {
@@ -146,11 +146,11 @@
                 "it": "Automatica",
                 "sv": "Automatiskt",
                 "no": "Automatisk",
-                "es": "AutomÃ¡tico",
+                "es": "Automático",
                 "da": "Automatisk",
-                "ru": "ÐÐ²Ñ‚Ð¾Ð¼Ð°Ñ‚Ð¸Ñ‡ÐµÑÐºÐ¸",
+                "ru": "Автоматически",
                 "pl": "Automatyczny",
-                "ko": "ìžë™"
+                "ko": "자동"
               }
             },
             {
@@ -161,13 +161,13 @@
                 "de": "Heizen",
                 "fr": "Chauffer",
                 "it": "Calore",
-                "sv": "VÃ¤rme",
+                "sv": "Värme",
                 "no": "Varme",
                 "es": "Calentar",
                 "da": "Opvarm",
-                "ru": "ÐžÐ±Ð¾Ð³Ñ€ÐµÐ²",
+                "ru": "Обогрев",
                 "pl": "Ogrzewanie",
-                "ko": "ë‚œë°©"
+                "ko": "난방"
               }
             },
             {
@@ -175,16 +175,16 @@
               "title": {
                 "en": "Cool",
                 "nl": "Koelen",
-                "de": "KÃ¼hlen",
+                "de": "Kühlen",
                 "fr": "Refroidir",
                 "it": "Raffreddamento",
                 "sv": "Kyla",
-                "no": "AvkjÃ¸le",
+                "no": "Avkjøle",
                 "es": "Enfriar",
-                "da": "KÃ¸l ned",
-                "ru": "ÐžÑ…Ð»Ð°Ð¶Ð´ÐµÐ½Ð¸Ðµ",
-                "pl": "ChÅ‚odzenie",
-                "ko": "ëƒ‰ë°©"
+                "da": "Køl ned",
+                "ru": "Охлаждение",
+                "pl": "Chłodzenie",
+                "ko": "냉방"
               }
             }
           ]
@@ -227,16 +227,16 @@
       "title": {
         "en": "Thermostat mode has changed",
         "nl": "Thermostaat modus is veranderd",
-        "de": "Thermostat-Modus hat sich geÃ¤ndert",
-        "fr": "Mode thermostat a Ã©tÃ© modifiÃ©",
-        "it": "La modalitÃ  del termostato Ã¨ cambiata",
-        "sv": "TermostatlÃ¤ge Ã¤ndrades",
+        "de": "Thermostat-Modus hat sich geändert",
+        "fr": "Mode thermostat a été modifié",
+        "it": "La modalità del termostato è cambiata",
+        "sv": "Termostatläge ändrades",
         "no": "Termostatmodus ble endret",
         "es": "El modo del termostato ha cambiado",
-        "da": "Termostattilstand er blevet Ã¦ndret",
-        "ru": "Ð ÐµÐ¶Ð¸Ð¼ Ñ‚ÐµÑ€Ð¼Ð¾ÑÑ‚Ð°Ñ‚Ð° Ð¸Ð·Ð¼ÐµÐ½ÐµÐ½",
+        "da": "Termostattilstand er blevet ændret",
+        "ru": "Режим термостата изменен",
         "pl": "Zmiana trybu termostatu",
-        "ko": "ì˜¨ë„ì¡°ì ˆê¸° ëª¨ë“œ ë³€ê²½ë¨"
+        "ko": "온도조절기 모드 변경됨"
       },
       "args": [
         {
@@ -253,11 +253,11 @@
                 "it": "Automatica",
                 "sv": "Automatiskt",
                 "no": "Automatisk",
-                "es": "AutomÃ¡tico",
+                "es": "Automático",
                 "da": "Automatisk",
-                "ru": "ÐÐ²Ñ‚Ð¾Ð¼Ð°Ñ‚Ð¸Ñ‡ÐµÑÐºÐ¸",
+                "ru": "Автоматически",
                 "pl": "Automatyczny",
-                "ko": "ìžë™"
+                "ko": "자동"
               }
             },
             {
@@ -268,13 +268,13 @@
                 "de": "Heizen",
                 "fr": "Chauffer",
                 "it": "Calore",
-                "sv": "VÃ¤rme",
+                "sv": "Värme",
                 "no": "Varme",
                 "es": "Calentar",
                 "da": "Opvarm",
-                "ru": "ÐžÐ±Ð¾Ð³Ñ€ÐµÐ²",
+                "ru": "Обогрев",
                 "pl": "Ogrzewanie",
-                "ko": "ë‚œë°©"
+                "ko": "난방"
               }
             },
             {
@@ -282,16 +282,16 @@
               "title": {
                 "en": "Cool",
                 "nl": "Koelen",
-                "de": "KÃ¼hlen",
+                "de": "Kühlen",
                 "fr": "Refroidir",
                 "it": "Raffreddamento",
                 "sv": "Kyla",
-                "no": "AvkjÃ¸le",
+                "no": "Avkjøle",
                 "es": "Enfriar",
-                "da": "KÃ¸l ned",
-                "ru": "ÐžÑ…Ð»Ð°Ð¶Ð´ÐµÐ½Ð¸Ðµ",
-                "pl": "ChÅ‚odzenie",
-                "ko": "ëƒ‰ë°©"
+                "da": "Køl ned",
+                "ru": "Охлаждение",
+                "pl": "Chłodzenie",
+                "ko": "냉방"
               }
             }
           ]
@@ -344,10 +344,10 @@
         "nl": "Thermostaat modus !{{is|is niet}}",
         "de": "Thermostat-Modus !{{ist|ist nicht}}",
         "fr": "Mode thermostat !{{est|n'est pas}}",
-        "it": "La modalit  del termostato !{{Ã¨|non Ã¨}}",
-        "sv": "TermostatlÃ¤ge !{{Ã¤r|Ã¤r inte}}",
+        "it": "La modalità del termostato !{{è|non è}}",
+        "sv": "Termostatläge !{{är|är inte}}",
         "no": "Termostatmodus !{{er|er ikke}}",
-        "es": "El modo del termostato !{{estÃ¡|no estÃ¡}}",
+        "es": "El modo del termostato !{{está|no está}}",
         "da": "Termostattilstand !{{er|er ikke}}",
         "pl": "Tryb termostatu !{{to|to nie}}"
       },
@@ -391,14 +391,14 @@
               "title": {
                 "en": "Cool",
                 "nl": "Koelen",
-                "de": "KÃ¼hlen",
+                "de": "Kühlen",
                 "fr": "Refroidir",
                 "it": "Raffreddamento",
                 "sv": "Kyla",
                 "no": "Avkjøle",
                 "es": "Enfriar",
                 "da": "Køl ned",
-                "pl": "ChÅ‚odzenie"
+                "pl": "Chłodzenie"
               }
             }
           ]
