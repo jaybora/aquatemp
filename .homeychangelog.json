@@ -43,5 +43,8 @@
   },
   "1.8.0": {
     "en": "Added temperature for exhaust and evaporator. Added fan speed. Better error handling."
+  },
+  "1.8.1": {
+    "en": "Removed the 'off' mode. Now we only have one place for switching device on and off. By the switch."
   }
 }

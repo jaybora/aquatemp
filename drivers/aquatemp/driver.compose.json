@@ -36,9 +36,75 @@
     "measure_frequency",
     "alarm_pump_supply",
     "silent_mode",
-    "fan_speed"
+    "fan_speed",
+    "fan_speed_setting.max",
+    "fan_speed_setting.min",
+    "frequency_setting"
   ],
   "capabilitiesOptions": {
+    "frequency_setting": {
+      "title": {
+        "en": "Maximal Frequency of Compressor",
+        "de": "Maximale Frequenz des Kompressors",
+        "fr": "Fréquence maximale du compresseur",
+        "es": "Frecuencia máxima del compresor",
+        "it": "Frequenza massima del compressore",
+        "nl": "Maximale frequentie van de compressor",
+        "sv": "Maximal frekvens för kompressorn",
+        "no": "Maksimal frekvens for kompressoren",
+        "da": "Maksimal frekvens for kompressoren",
+        "fi": "Kompressorin maksimitaajuus",
+        "pl": "Maksymalna częstotliwość sprężarki",
+        "pt": "Frequência máxima do compressor",
+        "cs": "Maximální frekvence kompresoru",
+        "hu": "Kompresszor maximális frekvenciája",
+        "ro": "Frecvența maximă a compresorului",
+        "el": "Μέγιστη συχνότητα συμπιεστή",
+        "bg": "Максимална честота на компресора"
+      }
+    },
+    "fan_speed_setting.max": {
+      "title": {
+        "en": "Maximum Fan Speed",
+        "da": "Maksimal ventilatorhastighed",
+        "de": "Maximale Lüftergeschwindigkeit",
+        "fr": "Vitesse maximale du ventilateur",
+        "es": "Velocidad máxima del ventilador",
+        "it": "Velocità massima della ventola",
+        "nl": "Maximale ventilatorsnelheid",
+        "sv": "Maximal fläkthastighet",
+        "no": "Maksimal viftehastighet",
+        "fi": "Maksimi tuulettimen nopeus",
+        "pl": "Maksymalna prędkość wentylatora",
+        "pt": "Velocidade máxima do ventilador",
+        "cs": "Maximální rychlost ventilátoru",
+        "hu": "Maximális ventilátorsebesség",
+        "ro": "Viteza maximă a ventilatorului",
+        "el": "Μέγιστη ταχύτητα ανεμιστήρα",
+        "bg": "Максимална скорост на вентилатора"
+      }
+    },
+    "fan_speed_setting.min": {
+      "title": {
+        "en": "Minimum Fan Speed",
+        "da": "Minimal ventilatorhastighed",
+        "de": "Minimale Lüftergeschwindigkeit",
+        "fr": "Vitesse minimale du ventilateur",
+        "es": "Velocidad mínima del ventilador",
+        "it": "Velocità minima della ventola",
+        "nl": "Minimale ventilatorsnelheid",
+        "sv": "Minimal fläkthastighet",
+        "no": "Minimal viftehastighet",
+        "fi": "Minimi tuulettimen nopeus",
+        "pl": "Minimalna prędkość wentylatora",
+        "pt": "Velocidade mínima do ventilador",
+        "cs": "Minimální rychlost ventilátoru",
+        "hu": "Minimális ventilátorsebesség",
+        "ro": "Viteza minimă a ventilatorului",
+        "el": "Ελάχιστη ταχύτητα ανεμιστήρα",
+        "bg": "Минимална скорост на вентилатора"
+      }
+    },
     "measure_temperature.inlet": {
       "title": {
         "en": "Inlet (from pool)",

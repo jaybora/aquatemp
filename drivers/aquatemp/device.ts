@@ -1,9 +1,15 @@
 import Homey from 'homey';
-import {ApiRequestError, AquatempAPI, AuthenticationError} from './aquatempAPI';
+import { ApiRequestError, AquatempAPI, AuthenticationError } from './aquatempAPI';
+import { ApiRequestCodes } from './apirequestcodes';
+interface HeatPumpDeviceSettings {
+  enable_experimental_features: boolean;
+  username: string;
+  password: string;
+  // Add any other settings your device uses
+}
 
 class HeatPumpDevice extends Homey.Device {
 
-  public HVAC_MODE = '';
   private timer: NodeJS.Timeout | null = null;
 
   /**
@@ -19,6 +25,11 @@ class HeatPumpDevice extends Homey.Device {
     if (!this.hasCapability('alarm_pump_supply')) {
       console.log(`Adding capability alarm_pump_supply to device ${this.getName()}`);
       await this.addCapability('alarm_pump_supply');
+    }
+
+    if (this.hasCapability('fan_speed_silent_mode')) {
+      console.log('Removing capability fan_speed_silent_mode');
+      await this.removeCapability('fan_speed_silent_mode');
     }
 
     if (this.hasCapability('outlet')) {
@@ -52,17 +63,28 @@ class HeatPumpDevice extends Homey.Device {
       await this.addCapability('fan_speed');
     }
 
+    await this.enableOrDisableExperimentalFeatures(this.getSettings().enable_experimental_features);
+
     this.registerCapabilityListener('target_temperature', async value => {
-      this.setTemp(value);
+      await this.setTemp(value);
     });
     this.registerCapabilityListener('onoff', async value => {
-      this.setOnOff(value);
+      await this.setOnOff(value);
     });
     this.registerCapabilityListener('silent_mode', async value => {
       await this.setSilentOnOff(value);
     });
     this.registerCapabilityListener('thermostat_mode', async value => {
-      this.setHvacMode(value);
+      await this.setHvacMode(value);
+    });
+    this.registerCapabilityListener('fan_speed_setting.max', async value => {
+      await this.setFanSpeedMax(value);
+    });
+    this.registerCapabilityListener('fan_speed_setting.min', async value => {
+      await this.setFanSpeedMin(value);
+    });
+    this.registerCapabilityListener('frequency_setting', async value => {
+      await this.setMaximumFrequencyHeating(value);
     });
 
     await this.updateData();
@@ -70,6 +92,38 @@ class HeatPumpDevice extends Homey.Device {
     setInterval(async () => {
       await this.updateData();
     }, 30000);
+  }
+
+  private async enableOrDisableExperimentalFeatures(enable: Boolean = false) {
+    if (enable === true) {
+      this.log('Enabling experimental features...');
+      if (!this.hasCapability('fan_speed_setting.max')) {
+        this.log('Adding new fan_speed_setting.max capability');
+        await this.addCapability('fan_speed_setting.max');
+      }
+      if (!this.hasCapability('fan_speed_setting.min')) {
+        this.log('Adding new fan_speed_setting.min capability');
+        await this.addCapability('fan_speed_setting.min');
+      }
+      if (!this.hasCapability('frequency_setting')) {
+        this.log('Adding new frequency_setting capability');
+        await this.addCapability('frequency_setting');
+      }
+    } else {
+      this.log('Disabling experimental features...');
+      if (this.hasCapability('fan_speed_setting.max')) {
+        this.log('Removing fan_speed_setting.max capability');
+        await this.removeCapability('fan_speed_setting.max');
+      }
+      if (this.hasCapability('fan_speed_setting.min')) {
+        this.log('Removing new fan_speed_setting.min capability');
+        await this.removeCapability('fan_speed_setting.min');
+      }
+      if (this.hasCapability('frequency_setting')) {
+        this.log('Removing new frequency_setting capability');
+        await this.removeCapability('frequency_setting');
+      }
+    }
   }
 
   /**
@@ -87,8 +141,23 @@ class HeatPumpDevice extends Homey.Device {
    * @param {string[]} event.changedKeys An array of keys changed since the previous version
    * @returns {Promise<string|void>} return a custom message that will be displayed
    */
-  async onSettings({ oldSettings: {}, newSettings: {}, changedKeys: {} }): Promise<string | void> {
-    await this.updateData();
+  // eslint-disable-next-line no-empty-pattern
+  async onSettings({oldSettings, newSettings, changedKeys}: {
+    oldSettings: HeatPumpDeviceSettings;
+    newSettings: HeatPumpDeviceSettings;
+    changedKeys: string[];
+  }): Promise<string | void> {
+    // run when the user has changed the device's settings in Homey.
+    // changedKeysArr contains an array of keys that have been changed
+    // if the settings must not be saved for whatever reason:
+    // throw new Error('Your error message');
+    await this.enableOrDisableExperimentalFeatures(newSettings.enable_experimental_features);
+    if (!changedKeys.includes('enable_experimental_features')) {
+      // If we run updateData after disabling experimantal feature
+      // it will try to update the capabilities that already has
+      // been removed.
+      await this.updateData();
+    }
   }
 
   /**
@@ -146,7 +215,7 @@ class HeatPumpDevice extends Homey.Device {
 
   async setValues(result: any) {
     this.log('Values from server: ', result);
-    const isPowerOn = await this.extractValueByCode(result, 'Power') === 1;
+    const isPowerOn = this.extractValueByCode(result, 'Power') === 1;
     await this.setCapabilityValue('measure_voltage', this.extractValueByCode(result, 'T14')).catch(this.error);
     await this.setCapabilityValue('measure_frequency', this.extractValueByCode(result, 'O07')).catch(this.error);
     if (isPowerOn) {
@@ -160,11 +229,10 @@ class HeatPumpDevice extends Homey.Device {
     await this.setCapabilityValue('meter_power', (this.extractValueByCode(result, 'T14') * this.extractValueByCode(result, 'T07')) / 1000).catch(this.error);
     await this.setCapabilityValue('silent_mode', this.extractValueByCode(result, 'Manual-mute') === 1).catch(this.error);
 
-    this.getHvacMode(result);
-    await this.setCapabilityValue('thermostat_mode', this.HVAC_MODE);
+    const hvacMode = this.getHvacMode(result);
+    await this.setCapabilityValue('thermostat_mode', hvacMode);
 
-    const targetTemp = this.getTargetTemp(this.HVAC_MODE, result);
-    await this.setCapabilityValue('target_temperature', targetTemp).catch(this.error);
+    await this.setCapabilityValue('target_temperature', this.extractTargetTemperature(hvacMode, result)).catch(this.error);
 
     await this.setCapabilityValue('measure_temperature.inlet', this.extractValueByCode(result, 'T02')).catch(this.error);
     await this.setCapabilityValue('measure_temperature.outlet', this.extractValueByCode(result, 'T03')).catch(this.error);
@@ -173,6 +241,11 @@ class HeatPumpDevice extends Homey.Device {
     await this.setCapabilityValue('measure_temperature.coil', this.extractValueByCode(result, 'T04')).catch(this.error);
     await this.setCapabilityValue('measure_temperature.exhaust', this.extractValueByCode(result, 'T06')).catch(this.error);
     await this.setCapabilityValue('fan_speed', this.extractValueByCode(result, 'T12')).catch(this.error);
+    if (this.getSetting('enable_experimental_features')) {
+      await this.setCapabilityValue('fan_speed_setting.max', this.extractValueByCode(result, ApiRequestCodes.CODES.FAN_SPEED_MAX)).catch(this.error);
+      await this.setCapabilityValue('fan_speed_setting.min', this.extractValueByCode(result, ApiRequestCodes.CODES.FAN_SPEED_MIN)).catch(this.error);
+      await this.setCapabilityValue('frequency_setting', this.extractValueByCode(result, ApiRequestCodes.CODES.MAX_FREQUENCY_HEATING)).catch(this.error);
+    }
     this.log('Done updating values');
   }
 
@@ -194,7 +267,7 @@ class HeatPumpDevice extends Homey.Device {
     return (foundItem.value as string).charAt(position);
   }
 
-  getTargetTemp(hvacMode: string, result: any) {
+  extractTargetTemperature(hvacMode: string, result: any) {
     let targetTemp = 0;
     switch (hvacMode) {
       case 'cool':
@@ -217,12 +290,7 @@ class HeatPumpDevice extends Homey.Device {
     } else {
       data = { param: [{ device_code: this.getDeviceCode(), protocol_code: 'power', value: '0' }] };
     }
-    const res = await this.updateDeviceData(data);
-    if (res.data.error_msg === 'Success') {
-      this.HVAC_MODE = isTurnOn ? 'heat' : 'off';
-      await this.setCapabilityValue('thermostat_mode', this.HVAC_MODE);
-      this.log(`Turned to ${this.HVAC_MODE}`);
-    }
+    await this.updateDeviceData(data);
   }
 
   async setSilentOnOff(isTurnOn: boolean) {
@@ -236,16 +304,36 @@ class HeatPumpDevice extends Homey.Device {
     await this.updateDeviceData(data);
   }
 
+  async setFanSpeedMax(speed: number) {
+    let data = {};
+    data = { param: [{ device_code: this.getDeviceCode(), protocol_code: ApiRequestCodes.CODES.FAN_SPEED_MAX, value: speed }] };
+    this.log(`Setting max fan speed to: ${JSON.stringify(data)}`);
+    await this.updateDeviceData(data);
+  }
+
+  async setFanSpeedMin(speed: number) {
+    let data = {};
+    data = { param: [{ device_code: this.getDeviceCode(), protocol_code: ApiRequestCodes.CODES.FAN_SPEED_MIN, value: speed }] };
+    this.log(`Setting min fan speed to: ${JSON.stringify(data)}`);
+    await this.updateDeviceData(data);
+  }
+
+  async setMaximumFrequencyHeating(frequency: number) {
+    let data = {};
+    data = { param: [{ device_code: this.getDeviceCode(), protocol_code: ApiRequestCodes.CODES.MAX_FREQUENCY_HEATING, value: frequency }] };
+    this.log(`Setting max frequency to: ${JSON.stringify(data)}`);
+    await this.updateDeviceData(data);
+  }
+
   private updateDeviceData(data: {}) {
     this.log(`Updating device data: ${JSON.stringify(data)}`);
     return new AquatempAPI(this.getSetting('username'), this.getSetting('password'))
       .setDeviceData(data);
   }
 
-  getHvacMode(result: any) {
+  getHvacMode(result: any): string {
     let mode = '';
     const modeString = result.find((x: any) => x.code === 'Mode');
-    const power = result.find((x: any) => x.code === 'Power');
     switch (modeString.value) {
       case '0':
         mode = 'cool';
@@ -260,29 +348,12 @@ class HeatPumpDevice extends Homey.Device {
         mode = 'unknown';
         break;
     }
-    if (power.value === '0') {
-      this.HVAC_MODE = 'off';
-    } else {
-      this.HVAC_MODE = mode;
-    }
+    return mode;
   }
 
   async setHvacMode(newMode: string) {
     let value = '';
-    let code = 'mode';
-    if (this.HVAC_MODE === 'off' && newMode !== 'off') {
-      const data = {
-        param: [{
-          device_code: this.getDeviceCode(),
-          protocol_code: 'power',
-          value: '1',
-        }],
-      };
-      const res = await this.updateDeviceData(data);
-      if (res.data.error_msg === 'Success') {
-        this.setCapabilityValue('onoff', true).catch(this.error);
-      }
-    }
+    const code = 'mode';
     switch (newMode) {
       case 'cool':
         value = '0';
@@ -293,10 +364,8 @@ class HeatPumpDevice extends Homey.Device {
       case 'auto':
         value = '2';
         break;
-      case 'off':
-        value = '0';
-        code = 'power';
-        break;
+      default:
+        throw new Error(`Unknown hvac mode: ${newMode}`);
     }
     const data = {
       param: [{
@@ -307,13 +376,14 @@ class HeatPumpDevice extends Homey.Device {
     };
     const res = await this.updateDeviceData(data);
     if (res.data.error_msg === 'Success') {
-      this.setCapabilityValue('thermostat_mode', newMode).catch(this.error);
+      await this.setCapabilityValue('thermostat_mode', newMode).catch(this.error);
+      await this.updateData();
     }
   }
 
   async setTemp(desiredTemp: number) {
     let mode = '';
-    switch (this.HVAC_MODE) {
+    switch (this.getCapabilityValue('thermostat_mode') as string) {
       case 'cool':
         mode = 'R01';
         break;

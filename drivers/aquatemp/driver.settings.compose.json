@@ -1,0 +1,21 @@
+[
+  {
+    "type": "group",
+    "label": {
+      "en": "Experimental features"
+    },
+    "children": [
+      {
+        "id": "enable_experimental_features",
+        "type": "checkbox",
+        "label": {
+          "en": "Enable experimental features"
+        },
+        "value": false,
+        "hint": {
+          "en": "Warning: Enabling experimental features is at your own risk. Risk of damaging your heatpump! This will add features, that can change the preset settings in the heatpump, as inverter frequency and fan speed."
+        }
+      }
+    ]
+  }
+]

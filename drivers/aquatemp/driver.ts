@@ -30,6 +30,32 @@ class MyDriver extends Homey.Driver {
         await args.device.setSilentOnOff(false);
         return args.device.setCapabilityValue('silent_mode', false);
       });
+
+    this.homey.flow.getActionCard('set_fan_speed_silent_mode')
+      .registerRunListener(async (args, state) => {
+        this.log(`Not setting fan speed in silent mode to: ${args.fan_speed}`);
+        // await args.device.setFanSpeedInSilentMode(args.fan_speed);
+        // return args.device.setCapabilityValue('fan_speed_silent_mode', args.fan_speed);
+      });
+
+    this.homey.flow.getDeviceTriggerCard('thermostat_mode_changed')
+      .registerRunListener((args, state) => {
+        this.log(`Thermostat mode changed to: ${args.device.getCapabilityValue('thermostat_mode')}`);
+        return args.device.getCapabilityValue('thermostat_mode') === args.thermostat_mode;
+      });
+
+    this.homey.flow.getConditionCard('thermostat_mode_is')
+      .registerRunListener((args, state) => {
+        this.log(`Thermostat mode is: ${args.device.getCapabilityValue('thermostat_mode')}`);
+        return args.device.getCapabilityValue('thermostat_mode') === args.thermostat_mode;
+      });
+
+    this.homey.flow.getActionCard('thermostat_mode_set')
+      .registerRunListener(async (args, state) => {
+        this.log(`Setting thermostat mode to: ${args.thermostat_mode}`);
+        await args.device.setThermostatMode(args.thermostat_mode);
+        return args.device.setCapabilityValue('thermostat_mode', args.thermostat_mode);
+      });
   }
 
   async onPair(session: any) {
