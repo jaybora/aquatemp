@@ -39,7 +39,7 @@
     "fan_speed",
     "fan_speed_setting.max",
     "fan_speed_setting.min",
-    "frequency_setting"
+    "frequency_setting.heating_max"
   ],
   "capabilitiesOptions": {
     "frequency_setting": {

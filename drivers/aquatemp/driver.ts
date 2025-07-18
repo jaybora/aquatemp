@@ -1,5 +1,6 @@
 import Homey from 'homey';
 import { ApiRequestError, AquatempAPI, AuthenticationError } from './aquatempAPI';
+import {ApiRequestCodes} from "./apirequestcodes";
 
 class MyDriver extends Homey.Driver {
 
@@ -13,14 +14,12 @@ class MyDriver extends Homey.Driver {
       .registerRunListener(async (args, state) => {
         this.log(`Setting silent mode to: ${args.silent_mode}`);
         await args.device.setSilentOnOff(args.silent_mode);
-        return args.device.setCapabilityValue('silent_mode', args.silent_mode);
       });
 
     this.homey.flow.getActionCard('turn_silent_mode_on')
       .registerRunListener(async (args, state) => {
         this.log('Setting silent mode to on');
         await args.device.setSilentOnOff(true);
-        return args.device.setCapabilityValue('silent_mode', true);
       });
 
     // Register action for turning silent mode off
@@ -28,14 +27,24 @@ class MyDriver extends Homey.Driver {
       .registerRunListener(async (args, state) => {
         this.log('Setting silent mode to off');
         await args.device.setSilentOnOff(false);
-        return args.device.setCapabilityValue('silent_mode', false);
       });
 
-    this.homey.flow.getActionCard('set_fan_speed_silent_mode')
+    this.homey.flow.getActionCard('set_max_fan_speed')
       .registerRunListener(async (args, state) => {
-        this.log(`Not setting fan speed in silent mode to: ${args.fan_speed}`);
-        // await args.device.setFanSpeedInSilentMode(args.fan_speed);
-        // return args.device.setCapabilityValue('fan_speed_silent_mode', args.fan_speed);
+        this.log(`Setting maximal fan speed to: ${args.fan_speed}`);
+        await args.device.setFanSpeedMax(args.fan_speed);
+      });
+
+    this.homey.flow.getActionCard('set_min_fan_speed')
+      .registerRunListener(async (args, state) => {
+        this.log(`Setting minimal fan speed to: ${args.fan_speed}`);
+        await args.device.setFanSpeedMin(args.fan_speed);
+      });
+
+    this.homey.flow.getActionCard('set_max_frequency_in_heating_mode')
+      .registerRunListener(async (args, state) => {
+        this.log(`Setting maximal frequency in heating mode to: ${args.maximal_frequency_in_heating_mode}`);
+        await args.device.setMaximumFrequencyHeating(args.maximal_frequency_in_heating_mode);
       });
 
     this.homey.flow.getDeviceTriggerCard('thermostat_mode_changed')

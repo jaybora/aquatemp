@@ -32,6 +32,11 @@ class HeatPumpDevice extends Homey.Device {
       await this.removeCapability('fan_speed_silent_mode');
     }
 
+    if (this.hasCapability('frequency_setting')) {
+      console.log('Removing capability frequency_setting');
+      await this.removeCapability('frequency_setting');
+    }
+
     if (this.hasCapability('outlet')) {
       this.log('Removing old outlet capability');
       await this.removeCapability('outlet');
@@ -83,7 +88,7 @@ class HeatPumpDevice extends Homey.Device {
     this.registerCapabilityListener('fan_speed_setting.min', async value => {
       await this.setFanSpeedMin(value);
     });
-    this.registerCapabilityListener('frequency_setting', async value => {
+    this.registerCapabilityListener('frequency_setting.heating_max', async value => {
       await this.setMaximumFrequencyHeating(value);
     });
 
@@ -105,9 +110,9 @@ class HeatPumpDevice extends Homey.Device {
         this.log('Adding new fan_speed_setting.min capability');
         await this.addCapability('fan_speed_setting.min');
       }
-      if (!this.hasCapability('frequency_setting')) {
-        this.log('Adding new frequency_setting capability');
-        await this.addCapability('frequency_setting');
+      if (!this.hasCapability('frequency_setting.heating_max')) {
+        this.log('Adding new frequency_setting.heating_max capability');
+        await this.addCapability('frequency_setting.heating_max');
       }
     } else {
       this.log('Disabling experimental features...');
@@ -119,9 +124,9 @@ class HeatPumpDevice extends Homey.Device {
         this.log('Removing new fan_speed_setting.min capability');
         await this.removeCapability('fan_speed_setting.min');
       }
-      if (this.hasCapability('frequency_setting')) {
-        this.log('Removing new frequency_setting capability');
-        await this.removeCapability('frequency_setting');
+      if (this.hasCapability('frequency_setting.heating_max')) {
+        this.log('Removing new frequency_setting.heating_max capability');
+        await this.removeCapability('frequency_setting.heating_max');
       }
     }
   }
@@ -244,7 +249,7 @@ class HeatPumpDevice extends Homey.Device {
     if (this.getSetting('enable_experimental_features')) {
       await this.setCapabilityValue('fan_speed_setting.max', this.extractValueByCode(result, ApiRequestCodes.CODES.FAN_SPEED_MAX)).catch(this.error);
       await this.setCapabilityValue('fan_speed_setting.min', this.extractValueByCode(result, ApiRequestCodes.CODES.FAN_SPEED_MIN)).catch(this.error);
-      await this.setCapabilityValue('frequency_setting', this.extractValueByCode(result, ApiRequestCodes.CODES.MAX_FREQUENCY_HEATING)).catch(this.error);
+      await this.setCapabilityValue('frequency_setting.heating_max', this.extractValueByCode(result, ApiRequestCodes.CODES.MAX_FREQUENCY_HEATING)).catch(this.error);
     }
     this.log('Done updating values');
   }
@@ -302,6 +307,7 @@ class HeatPumpDevice extends Homey.Device {
     }
     this.log(`Setting silent mode to: ${JSON.stringify(data)}`);
     await this.updateDeviceData(data);
+    await this.setCapabilityValue('silent_mode', isTurnOn);
   }
 
   async setFanSpeedMax(speed: number) {
@@ -309,6 +315,7 @@ class HeatPumpDevice extends Homey.Device {
     data = { param: [{ device_code: this.getDeviceCode(), protocol_code: ApiRequestCodes.CODES.FAN_SPEED_MAX, value: speed }] };
     this.log(`Setting max fan speed to: ${JSON.stringify(data)}`);
     await this.updateDeviceData(data);
+    await this.setCapabilityValue('fan_speed_setting.max', speed).catch(this.error);
   }
 
   async setFanSpeedMin(speed: number) {
@@ -316,6 +323,7 @@ class HeatPumpDevice extends Homey.Device {
     data = { param: [{ device_code: this.getDeviceCode(), protocol_code: ApiRequestCodes.CODES.FAN_SPEED_MIN, value: speed }] };
     this.log(`Setting min fan speed to: ${JSON.stringify(data)}`);
     await this.updateDeviceData(data);
+    await this.setCapabilityValue('fan_speed_setting.min', speed).catch(this.error);
   }
 
   async setMaximumFrequencyHeating(frequency: number) {
@@ -323,6 +331,7 @@ class HeatPumpDevice extends Homey.Device {
     data = { param: [{ device_code: this.getDeviceCode(), protocol_code: ApiRequestCodes.CODES.MAX_FREQUENCY_HEATING, value: frequency }] };
     this.log(`Setting max frequency to: ${JSON.stringify(data)}`);
     await this.updateDeviceData(data);
+    await this.setCapabilityValue('frequency_setting.heating_max', frequency).catch(this.error);
   }
 
   private updateDeviceData(data: {}) {
