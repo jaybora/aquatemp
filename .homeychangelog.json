@@ -46,5 +46,8 @@
   },
   "1.8.1": {
     "en": "Removed the 'off' mode. Now we only have one place for switching device on and off. By the switch."
+  },
+  "1.8.2": {
+    "en": "Fixed wrongly shown frequency value (it was the exhaust temperature). Added setting for expirimental features. Those features are controlling fan speed and frequency of compressor."
   }
 }
