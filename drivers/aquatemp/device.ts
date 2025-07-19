@@ -1,5 +1,5 @@
-import Homey from 'homey';
-import { ApiRequestError, AquatempAPI, AuthenticationError } from './aquatempAPI';
+import Homey, {Device} from 'homey';
+import {ApiRequestError, AquatempAPI, AuthenticationError, DeviceOfflineError} from './aquatempAPI';
 import { ApiRequestCodes } from './apirequestcodes';
 interface HeatPumpDeviceSettings {
   enable_experimental_features: boolean;
@@ -202,6 +202,9 @@ class HeatPumpDevice extends Homey.Device {
         this.error(`Error fetching data from server: ApiRequestError - ${e.message}`);
         await this.setUnavailable('Cannot connect to server. '
           + 'Check homeys connection to internet, or try restarting the app, or the homey');
+      } else if (e instanceof DeviceOfflineError) {
+        this.error(`${e.message}`);
+        await this.setUnavailable(`Device ${deviceCode} is not online. Check the wifi module is connected to the internet, and that the heatpump has power. `);
       } else if (e instanceof Error) {
         this.error(`Error fetching data from server: ${e.message}`);
         await this.setUnavailable('Cannot connect to server: '

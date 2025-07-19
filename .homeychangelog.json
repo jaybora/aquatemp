@@ -49,5 +49,8 @@
   },
   "1.8.2": {
     "en": "Fixed wrongly shown frequency value (it was the exhaust temperature). Added setting for expirimental features. Those features are controlling fan speed and frequency of compressor."
+  },
+  "1.8.3": {
+    "en": "Handle error when device is not available."
   }
 }

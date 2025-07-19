@@ -38,6 +38,19 @@ export class ApiRequestError extends Error {
 
 }
 
+export class DeviceOfflineError extends Error {
+
+  public statusCode?: number;
+
+  constructor(message: string, statusCode?: number) {
+    super(message);
+    this.name = 'DeviceOfflineError';
+    this.statusCode = statusCode;
+    Object.setPrototypeOf(this, DeviceOfflineError.prototype);
+  }
+
+}
+
 export class AquatempAPI {
 
   private username: string | null;
@@ -88,7 +101,7 @@ export class AquatempAPI {
       }
 
       // Re-throw non-Axios errors
-      throw error;
+      throw new ApiRequestError(`Unknown error executing request: ${error}`, undefined);
     }
   }
 
@@ -162,6 +175,13 @@ export class AquatempAPI {
   }
 
   public async getDeviceData(deviceCode: string): Promise<any> {
+    // Check device is online. We need to get list of devices for getting access to the device status
+    const devices = await this.getOwnDevices();
+    const device = devices.data.objectResult.find((x: any) => x.device_code === deviceCode);
+    if (device.DeviceStatus !== 'ONLINE') {
+      throw new DeviceOfflineError(`Device ${deviceCode} is not online`);
+    }
+    console.log('Device is online, getting data from server: ', deviceCode, '')
     const result = await this.executeApiRequest(async () => {
       return axios({
         method: 'post',
@@ -180,6 +200,9 @@ export class AquatempAPI {
     if (result.data.objectResult.length === 0) {
       throw new ApiRequestError('Getting device data from aquatemp server failed. Reply from server is empty');
     }
+
+
+
     if (!result.data.isReusltSuc) {
       console.log(`Getting device data from server failed, isResultSec = false. 
       Returned data from server is ${result.data.objectResult}`);
