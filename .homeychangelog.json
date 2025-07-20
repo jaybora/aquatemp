@@ -52,5 +52,7 @@
   },
   "1.8.3": {
     "en": "Handle error when device is not available."
-  }
+  "1.8.4": {
+    "en": "Fix bug when device is not available."
+  },
 }

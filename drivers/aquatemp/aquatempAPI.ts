@@ -168,6 +168,7 @@ export class AquatempAPI {
         },
       });
     });
+    console.log('Server response:', JSON.stringify(result.data, null, 2));
     if (!result.data.isReusltSuc) {
       throw new ApiRequestError('Getting device list from aquatemp server failed.');
     }
@@ -178,7 +179,8 @@ export class AquatempAPI {
     // Check device is online. We need to get list of devices for getting access to the device status
     const devices = await this.getOwnDevices();
     const device = devices.data.objectResult.find((x: any) => x.device_code === deviceCode);
-    if (device.DeviceStatus !== 'ONLINE') {
+    console.log(`Device found in list of devices: ${deviceCode} ${device}`);
+    if (device.deviceStatus !== 'ONLINE') {
       throw new DeviceOfflineError(`Device ${deviceCode} is not online`);
     }
     console.log('Device is online, getting data from server: ', deviceCode, '')
