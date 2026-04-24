@@ -29,7 +29,7 @@ export class ApiRequestCodes {
     FAN_SPEED_MANUEL: 'F18',
     FAN_SPEED_MAX: 'F11-r',
     FAN_SPEED_MIN: 'F13-r',
-    FAILURE_STATUS_1: '2074',
+    FAILURE_STATUS_1: '2074', // Excel bit 9 = pump supply (charAt(6)), Excel bit 15 = defrost (charAt(0))
     FAILURE_STATUS_2: '2075',
     FAILURE_STATUS_3: '2076',
     FAILURE_STATUS_4: '2077',

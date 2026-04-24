@@ -35,6 +35,7 @@
     "measure_temperature.surrounding",
     "measure_frequency",
     "alarm_pump_supply",
+    "alarm_defrost",
     "silent_mode",
     "fan_speed",
     "fan_speed_setting.max",

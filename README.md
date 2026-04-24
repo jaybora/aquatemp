@@ -32,3 +32,4 @@ This Homey app provides integration with Aquatemp wifi modules, allowing you to 
   - Voltage
 - ⚠️ Safety Features
   - No-flow alarm monitoring
+  - Defrost mode detection

@@ -67,6 +67,10 @@ class HeatPumpDevice extends Homey.Device {
       this.log('Adding new fan_speed capability');
       await this.addCapability('fan_speed');
     }
+    if (!this.hasCapability('alarm_defrost')) {
+      this.log('Adding new alarm_defrost capability');
+      await this.addCapability('alarm_defrost');
+    }
 
     await this.enableOrDisableExperimentalFeatures(this.getSettings().enable_experimental_features);
 
@@ -223,32 +227,33 @@ class HeatPumpDevice extends Homey.Device {
 
   async setValues(result: any) {
     this.log('Values from server: ', result);
-    const isPowerOn = this.extractValueByCode(result, 'Power') === 1;
-    await this.setCapabilityValue('measure_voltage', this.extractValueByCode(result, 'T14')).catch(this.error);
-    await this.setCapabilityValue('measure_frequency', this.extractValueByCode(result, 'O07')).catch(this.error);
+    const isPowerOn = this.extractValueByCode(result, ApiRequestCodes.CODES.POWER) === 1;
+    await this.setCapabilityValue('measure_voltage', this.extractValueByCode(result, ApiRequestCodes.CODES.VOLTAGE)).catch(this.error);
+    await this.setCapabilityValue('measure_frequency', this.extractValueByCode(result, ApiRequestCodes.CODES.FREQUENCY)).catch(this.error);
     if (isPowerOn) {
-      await this.setCapabilityValue('alarm_pump_supply', this.extractValueByCodeAndPosition(result, '2074', 6) === '1').catch(this.error);
+      await this.setCapabilityValue('alarm_pump_supply', this.extractValueByCodeAndPosition(result, ApiRequestCodes.CODES.FAILURE_STATUS_1, 9) === '1').catch(this.error);
     } else {
       await this.setCapabilityValue('alarm_pump_supply', false).catch(this.error);
     }
-    await this.setCapabilityValue('measure_current', this.extractValueByCode(result, 'T07')).catch(this.error);
-    await this.setCapabilityValue('measure_power', Math.round(this.extractValueByCode(result, 'T14') * this.extractValueByCode(result, 'T07')));
+    await this.setCapabilityValue('measure_current', this.extractValueByCode(result, ApiRequestCodes.CODES.CURRENT)).catch(this.error);
+    await this.setCapabilityValue('measure_power', Math.round(this.extractValueByCode(result, ApiRequestCodes.CODES.VOLTAGE) * this.extractValueByCode(result, ApiRequestCodes.CODES.CURRENT)));
     await this.setCapabilityValue('onoff', isPowerOn).catch(this.error);
-    await this.setCapabilityValue('meter_power', (this.extractValueByCode(result, 'T14') * this.extractValueByCode(result, 'T07')) / 1000).catch(this.error);
-    await this.setCapabilityValue('silent_mode', this.extractValueByCode(result, 'Manual-mute') === 1).catch(this.error);
+    await this.setCapabilityValue('meter_power', (this.extractValueByCode(result, ApiRequestCodes.CODES.VOLTAGE) * this.extractValueByCode(result, ApiRequestCodes.CODES.CURRENT)) / 1000).catch(this.error);
+    await this.setCapabilityValue('silent_mode', this.extractValueByCode(result, ApiRequestCodes.CODES.SILENT_MODE) === 1).catch(this.error);
 
     const hvacMode = this.getHvacMode(result);
     await this.setCapabilityValue('thermostat_mode', hvacMode);
 
     await this.setCapabilityValue('target_temperature', this.extractTargetTemperature(hvacMode, result)).catch(this.error);
 
-    await this.setCapabilityValue('measure_temperature.inlet', this.extractValueByCode(result, 'T02')).catch(this.error);
-    await this.setCapabilityValue('measure_temperature.outlet', this.extractValueByCode(result, 'T03')).catch(this.error);
-    await this.setCapabilityValue('measure_temperature.surrounding', this.extractValueByCode(result, 'T05')).catch(this.error);
-    await this.setCapabilityValue('measure_temperature', this.extractValueByCode(result, 'T02')).catch(this.error);
-    await this.setCapabilityValue('measure_temperature.coil', this.extractValueByCode(result, 'T04')).catch(this.error);
-    await this.setCapabilityValue('measure_temperature.exhaust', this.extractValueByCode(result, 'T06')).catch(this.error);
-    await this.setCapabilityValue('fan_speed', this.extractValueByCode(result, 'T12')).catch(this.error);
+    await this.setCapabilityValue('measure_temperature.inlet', this.extractValueByCode(result, ApiRequestCodes.CODES.WATER_INLET_TEMP)).catch(this.error);
+    await this.setCapabilityValue('measure_temperature.outlet', this.extractValueByCode(result, ApiRequestCodes.CODES.WATER_OUTLET_TEMP)).catch(this.error);
+    await this.setCapabilityValue('measure_temperature.surrounding', this.extractValueByCode(result, ApiRequestCodes.CODES.AMBIENT_TEMP)).catch(this.error);
+    await this.setCapabilityValue('measure_temperature', this.extractValueByCode(result, ApiRequestCodes.CODES.WATER_INLET_TEMP)).catch(this.error);
+    await this.setCapabilityValue('measure_temperature.coil', this.extractValueByCode(result, ApiRequestCodes.CODES.COIL_TEMP)).catch(this.error);
+    await this.setCapabilityValue('measure_temperature.exhaust', this.extractValueByCode(result, ApiRequestCodes.CODES.EXHAUST_TEMP)).catch(this.error);
+    await this.setCapabilityValue('fan_speed', this.extractValueByCode(result, ApiRequestCodes.CODES.FAN_MOTOR_SPEED)).catch(this.error);
+    await this.setCapabilityValue('alarm_defrost', this.extractValueByCodeAndPosition(result, ApiRequestCodes.CODES.FAILURE_STATUS_1, 15) === '1').catch(this.error);
     if (this.getSetting('enable_experimental_features')) {
       await this.setCapabilityValue('fan_speed_setting.max', this.extractValueByCode(result, ApiRequestCodes.CODES.FAN_SPEED_MAX)).catch(this.error);
       await this.setCapabilityValue('fan_speed_setting.min', this.extractValueByCode(result, ApiRequestCodes.CODES.FAN_SPEED_MIN)).catch(this.error);
@@ -272,20 +277,21 @@ class HeatPumpDevice extends Homey.Device {
       this.error();
       throw new Error(`Item with code "${code}" not found`);
     }
-    return (foundItem.value as string).charAt(position);
+    const str = foundItem.value as string;
+    return str.charAt(str.length - 1 - position);
   }
 
   extractTargetTemperature(hvacMode: string, result: any) {
     let targetTemp = 0;
     switch (hvacMode) {
       case 'cool':
-        targetTemp = Number(result.find((x: any) => x.code === 'R01').value) > 35 ? 35 : (Number(result.find((x: any) => x.code === 'R01').value));
+        targetTemp = Number(result.find((x: any) => x.code === ApiRequestCodes.CODES.COOL_TEMP_SETTING).value) > 35 ? 35 : (Number(result.find((x: any) => x.code === ApiRequestCodes.CODES.COOL_TEMP_SETTING).value));
         break;
       case 'auto':
-        targetTemp = Number(result.find((x: any) => x.code === 'R03').value) > 35 ? 35 : (Number(result.find((x: any) => x.code === 'R03').value));
+        targetTemp = Number(result.find((x: any) => x.code === ApiRequestCodes.CODES.AUTO_TEMP_SETTING).value) > 35 ? 35 : (Number(result.find((x: any) => x.code === ApiRequestCodes.CODES.AUTO_TEMP_SETTING).value));
         break;
       default:
-        targetTemp = Number(result.find((x: any) => x.code === 'R02').value) > 35 ? 35 : (Number(result.find((x: any) => x.code === 'R02').value));
+        targetTemp = Number(result.find((x: any) => x.code === ApiRequestCodes.CODES.HEAT_TEMP_SETTING).value) > 35 ? 35 : (Number(result.find((x: any) => x.code === ApiRequestCodes.CODES.HEAT_TEMP_SETTING).value));
         break;
     }
     return targetTemp;
@@ -304,9 +310,9 @@ class HeatPumpDevice extends Homey.Device {
   async setSilentOnOff(isTurnOn: boolean) {
     let data = {};
     if (isTurnOn) {
-      data = { param: [{ device_code: this.getDeviceCode(), protocol_code: 'Manual-mute', value: 1 }] };
+      data = { param: [{ device_code: this.getDeviceCode(), protocol_code: ApiRequestCodes.CODES.SILENT_MODE, value: 1 }] };
     } else {
-      data = { param: [{ device_code: this.getDeviceCode(), protocol_code: 'Manual-mute', value: 0 }] };
+      data = { param: [{ device_code: this.getDeviceCode(), protocol_code: ApiRequestCodes.CODES.SILENT_MODE, value: 0 }] };
     }
     this.log(`Setting silent mode to: ${JSON.stringify(data)}`);
     await this.updateDeviceData(data);
@@ -345,7 +351,7 @@ class HeatPumpDevice extends Homey.Device {
 
   getHvacMode(result: any): string {
     let mode = '';
-    const modeString = result.find((x: any) => x.code === 'Mode');
+    const modeString = result.find((x: any) => x.code === ApiRequestCodes.CODES.MODE);
     switch (modeString.value) {
       case '0':
         mode = 'cool';
@@ -397,13 +403,13 @@ class HeatPumpDevice extends Homey.Device {
     let mode = '';
     switch (this.getCapabilityValue('thermostat_mode') as string) {
       case 'cool':
-        mode = 'R01';
+        mode = ApiRequestCodes.CODES.COOL_TEMP_SETTING;
         break;
       case 'heat':
-        mode = 'R02';
+        mode = ApiRequestCodes.CODES.HEAT_TEMP_SETTING;
         break;
       default:
-        mode = 'R03';
+        mode = ApiRequestCodes.CODES.AUTO_TEMP_SETTING;
         break;
     }
     const data = {
@@ -416,7 +422,7 @@ class HeatPumpDevice extends Homey.Device {
           },
           {
             device_code: this.getDeviceCode(),
-            protocol_code: 'Set_Temp',
+            protocol_code: ApiRequestCodes.CODES.SET_TEMPERATURE,
             value: desiredTemp,
           },
         ],

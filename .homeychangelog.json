@@ -52,7 +52,11 @@
   },
   "1.8.3": {
     "en": "Handle error when device is not available."
+  },
   "1.8.4": {
     "en": "Fix bug when device is not available."
   },
+  "1.9.0": {
+    "en": "Added defrost detection. The app now shows when the heatpump is in defrost mode, and you can use it in flows."
+  }
 }
