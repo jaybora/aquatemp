@@ -1,7 +1,7 @@
 {
   "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
   "id": "com.aquatemp.gullbergjansson",
-  "version": "1.9.0",
+  "version": "1.8.4",
   "compatibility": ">=12.2.0",
   "sdk": 3,
   "platforms": [
@@ -56,6 +56,20 @@
           "ru": "Режим термостата изменен",
           "pl": "Zmiana trybu termostatu",
           "ko": "온도조절기 모드 변경됨"
+        },
+        "titleFormatted": {
+          "en": "Thermostat mode changed to [[thermostat_mode]]",
+          "nl": "Thermostaat modus veranderd naar [[thermostat_mode]]",
+          "de": "Thermostat-Modus auf [[thermostat_mode]] geändert",
+          "fr": "Mode thermostat changé en [[thermostat_mode]]",
+          "it": "La modalità del termostato è cambiata a [[thermostat_mode]]",
+          "sv": "Termostatläge ändrat till [[thermostat_mode]]",
+          "no": "Termostatmodus endret til [[thermostat_mode]]",
+          "es": "El modo del termostato cambió a [[thermostat_mode]]",
+          "da": "Termostattilstand ændret til [[thermostat_mode]]",
+          "ru": "Режим термостата изменен на [[thermostat_mode]]",
+          "pl": "Tryb termostatu zmieniony na [[thermostat_mode]]",
+          "ko": "온도조절기 모드가 [[thermostat_mode]]으로 변경됨"
         },
         "args": [
           {
@@ -181,6 +195,18 @@
           "da": "Termostattilstand !{{er|er ikke}}",
           "pl": "Tryb termostatu !{{to|to nie}}"
         },
+        "titleFormatted": {
+          "en": "Thermostat mode !{{is|is not}} [[thermostat_mode]]",
+          "nl": "Thermostaat modus !{{is|is niet}} [[thermostat_mode]]",
+          "de": "Thermostat-Modus !{{ist|ist nicht}} [[thermostat_mode]]",
+          "fr": "Mode thermostat !{{est|n'est pas}} [[thermostat_mode]]",
+          "it": "La modalità del termostato !{{è|non è}} [[thermostat_mode]]",
+          "sv": "Termostatläge !{{är|är inte}} [[thermostat_mode]]",
+          "no": "Termostatmodus !{{er|er ikke}} [[thermostat_mode]]",
+          "es": "El modo del termostato !{{está|no está}} [[thermostat_mode]]",
+          "da": "Termostattilstand !{{er|er ikke}} [[thermostat_mode]]",
+          "pl": "Tryb termostatu !{{to|to nie}} [[thermostat_mode]]"
+        },
         "args": [
           {
             "type": "device",
@@ -261,6 +287,24 @@
           "hu": "Csendes Üzemmód beállítása",
           "pt": "Definir Modo Silencioso",
           "ro": "Setare Mod Silențios"
+        },
+        "titleFormatted": {
+          "en": "Set Silent Mode to [[silent_mode]]",
+          "nl": "Stille Modus instellen op [[silent_mode]]",
+          "de": "Leiser Modus auf [[silent_mode]] einstellen",
+          "fr": "Définir Mode Silencieux sur [[silent_mode]]",
+          "it": "Imposta Modalità Silenziosa su [[silent_mode]]",
+          "es": "Establecer Modo Silencioso a [[silent_mode]]",
+          "da": "Indstil Stille tilstand til [[silent_mode]]",
+          "no": "Sett Stillemodus til [[silent_mode]]",
+          "sv": "Ställ in Tyst läge till [[silent_mode]]",
+          "fi": "Aseta Hiljainen Tila arvoon [[silent_mode]]",
+          "pl": "Ustaw Tryb Cichy na [[silent_mode]]",
+          "cs": "Nastavit Tichý Režim na [[silent_mode]]",
+          "sk": "Nastaviť Tichý Režim na [[silent_mode]]",
+          "hu": "Csendes Üzemmód beállítása: [[silent_mode]]",
+          "pt": "Definir Modo Silencioso como [[silent_mode]]",
+          "ro": "Setare Mod Silențios la [[silent_mode]]"
         },
         "args": [
           {
@@ -390,6 +434,20 @@
           "pl": "Ustaw tryb",
           "ko": "모드 설정"
         },
+        "titleFormatted": {
+          "en": "Set the mode to [[thermostat_mode]]",
+          "nl": "Stel de modus in op [[thermostat_mode]]",
+          "de": "Modus auf [[thermostat_mode]] setzen",
+          "fr": "Définir le mode sur [[thermostat_mode]]",
+          "it": "Imposta la modalità su [[thermostat_mode]]",
+          "sv": "Ställ in läget till [[thermostat_mode]]",
+          "no": "Innstill modusen til [[thermostat_mode]]",
+          "es": "Configurar el modo en [[thermostat_mode]]",
+          "da": "Indstil tilstanden til [[thermostat_mode]]",
+          "ru": "Установить режим: [[thermostat_mode]]",
+          "pl": "Ustaw tryb na [[thermostat_mode]]",
+          "ko": "모드를 [[thermostat_mode]]으로 설정"
+        },
         "args": [
           {
             "type": "device",
@@ -470,6 +528,19 @@
           "es": "Ajustar la velocidad máxima del ventilador a",
           "fr": "Définir la vitesse maximale de ventilation sur"
         },
+        "titleFormatted": {
+          "en": "Set the maximal fan speed to [[fan_speed]]",
+          "nl": "De maximale ventilatorsnelheid instellen op [[fan_speed]]",
+          "da": "Indstil den maksimale ventilatorhastighed til [[fan_speed]]",
+          "it": "Imposta la velocità massima della ventola su [[fan_speed]]",
+          "ko": "최대 팬 속도를 [[fan_speed]]으로 설정",
+          "no": "Sett maksimal viftehastighet til [[fan_speed]]",
+          "pl": "Ustaw maksymalną prędkość wentylatora na [[fan_speed]]",
+          "ru": "Установить максимальную скорость вентилятора на [[fan_speed]]",
+          "sv": "Ställ in maximal fläkthastighet på [[fan_speed]]",
+          "es": "Ajustar la velocidad máxima del ventilador a [[fan_speed]]",
+          "fr": "Définir la vitesse maximale de ventilation sur [[fan_speed]]"
+        },
         "args": [
           {
             "type": "device",
@@ -502,6 +573,19 @@
           "sv": "Ställ in minimal fläkthastighet på",
           "es": "Ajustar la velocidad mínima del ventilador a",
           "fr": "Définir la vitesse minimale de ventilation sur"
+        },
+        "titleFormatted": {
+          "en": "Set the minimum fan speed to [[fan_speed]]",
+          "nl": "De minimale ventilatorsnelheid instellen op [[fan_speed]]",
+          "da": "Indstil den minimale ventilatorhastighed til [[fan_speed]]",
+          "it": "Imposta la velocità minima della ventola su [[fan_speed]]",
+          "ko": "최소 팬 속도를 [[fan_speed]]으로 설정",
+          "no": "Sett minimal viftehastighet til [[fan_speed]]",
+          "pl": "Ustaw minimalną prędkość wentylatora na [[fan_speed]]",
+          "ru": "Установить минимальную скорость вентилятора на [[fan_speed]]",
+          "sv": "Ställ in minimal fläkthastighet på [[fan_speed]]",
+          "es": "Ajustar la velocidad mínima del ventilador a [[fan_speed]]",
+          "fr": "Définir la vitesse minimale de ventilation sur [[fan_speed]]"
         },
         "args": [
           {
@@ -540,6 +624,24 @@
           "hu": "Állítsa be a maximális kompresszorfrekvenciát fűtési módban",
           "pt": "Definir a frequência máxima do compressor no modo de aquecimento para",
           "ro": "Setați frecvența maximă a compresorului în modul de încălzire la"
+        },
+        "titleFormatted": {
+          "en": "Set the maximal compressor frequency in heating mode to [[maximal_frequency_in_heating_mode]]",
+          "nl": "De maximale compressorfrequentie in verwarmingsmodus instellen op [[maximal_frequency_in_heating_mode]]",
+          "de": "Maximale Kompressorfrequenz im Heizmodus einstellen auf [[maximal_frequency_in_heating_mode]]",
+          "fr": "Définir la fréquence maximale du compresseur en mode chauffage sur [[maximal_frequency_in_heating_mode]]",
+          "it": "Imposta la frequenza massima del compressore in modalità riscaldamento su [[maximal_frequency_in_heating_mode]]",
+          "es": "Ajustar la frecuencia máxima del compresor en modo calefacción a [[maximal_frequency_in_heating_mode]]",
+          "da": "Indstil den maksimale kompressorfrekvens i varmetilstand til [[maximal_frequency_in_heating_mode]]",
+          "no": "Still inn maksimal kompressorfrekvens i varmemodus til [[maximal_frequency_in_heating_mode]]",
+          "sv": "Ställ in maximal kompressorfrekvens i värmeläge på [[maximal_frequency_in_heating_mode]]",
+          "fi": "Aseta maksimikompressoritaajuus lämmitystilassa arvoon [[maximal_frequency_in_heating_mode]]",
+          "pl": "Ustaw maksymalną częstotliwość sprężarki w trybie ogrzewania na [[maximal_frequency_in_heating_mode]]",
+          "cs": "Nastavit maximální frekvenci kompresoru v režimu vytápění na [[maximal_frequency_in_heating_mode]]",
+          "sk": "Nastaviť maximálnu frekvenciu kompresora v režime vykurovania na [[maximal_frequency_in_heating_mode]]",
+          "hu": "Állítsa be a maximális kompresszorfrekvenciát fűtési módban [[maximal_frequency_in_heating_mode]]",
+          "pt": "Definir a frequência máxima do compressor no modo de aquecimento para [[maximal_frequency_in_heating_mode]]",
+          "ro": "Setați frecvența maximă a compresorului în modul de încălzire la [[maximal_frequency_in_heating_mode]]"
         },
         "args": [
           {
@@ -961,6 +1063,68 @@
     }
   ],
   "capabilities": {
+    "alarm_defrost": {
+      "type": "boolean",
+      "title": {
+        "en": "Defrost",
+        "nl": "Ontdooien",
+        "de": "Abtauen",
+        "fr": "Dégivrage",
+        "it": "Sbrinamento",
+        "es": "Descongelación",
+        "da": "Afrimning",
+        "no": "Avriming",
+        "sv": "Avfrostning",
+        "fi": "Sulatustila",
+        "pl": "Rozmrażanie",
+        "cs": "Odmrazování",
+        "sk": "Odmrazovanie",
+        "hu": "Leolvasztás",
+        "pt": "Degelo",
+        "ro": "Dezghețare"
+      },
+      "insightsTitleTrue": {
+        "en": "Defrost On",
+        "nl": "Ontdooien Aan",
+        "de": "Abtauen An",
+        "fr": "Dégivrage Activé",
+        "it": "Sbrinamento Attivo",
+        "es": "Descongelación Activada",
+        "da": "Afrimning Til",
+        "no": "Avriming På",
+        "sv": "Avfrostning På",
+        "fi": "Sulatustila Päällä",
+        "pl": "Rozmrażanie Włączone",
+        "cs": "Odmrazování Zapnuto",
+        "sk": "Odmrazovanie Zapnuté",
+        "hu": "Leolvasztás Bekapcsolva",
+        "pt": "Degelo Ativado",
+        "ro": "Dezghețare Pornită"
+      },
+      "insightsTitleFalse": {
+        "en": "Defrost Off",
+        "nl": "Ontdooien Uit",
+        "de": "Abtauen Aus",
+        "fr": "Dégivrage Désactivé",
+        "it": "Sbrinamento Disattivo",
+        "es": "Descongelación Desactivada",
+        "da": "Afrimning Fra",
+        "no": "Avriming Av",
+        "sv": "Avfrostning Av",
+        "fi": "Sulatustila Pois",
+        "pl": "Rozmrażanie Wyłączone",
+        "cs": "Odmrazování Vypnuto",
+        "sk": "Odmrazovanie Vypnuté",
+        "hu": "Leolvasztás Kikapcsolva",
+        "pt": "Degelo Desativado",
+        "ro": "Dezghețare Oprită"
+      },
+      "getable": true,
+      "setable": false,
+      "insights": true,
+      "uiComponent": "sensor",
+      "icon": "/assets/defrost.svg"
+    },
     "fan_speed": {
       "type": "number",
       "title": {
@@ -1168,68 +1332,6 @@
       "insights": true,
       "uiComponent": "toggle",
       "icon": "/assets/volume_mute.svg"
-    },
-    "alarm_defrost": {
-      "type": "boolean",
-      "title": {
-        "en": "Defrost",
-        "nl": "Ontdooien",
-        "de": "Abtauen",
-        "fr": "Dégivrage",
-        "it": "Sbrinamento",
-        "es": "Descongelación",
-        "da": "Afrimning",
-        "no": "Avriming",
-        "sv": "Avfrostning",
-        "fi": "Sulatustila",
-        "pl": "Rozmrażanie",
-        "cs": "Odmrazování",
-        "sk": "Odmrazovanie",
-        "hu": "Leolvasztás",
-        "pt": "Degelo",
-        "ro": "Dezghețare"
-      },
-      "insightsTitleTrue": {
-        "en": "Defrost On",
-        "nl": "Ontdooien Aan",
-        "de": "Abtauen An",
-        "fr": "Dégivrage Activé",
-        "it": "Sbrinamento Attivo",
-        "es": "Descongelación Activada",
-        "da": "Afrimning Til",
-        "no": "Avriming På",
-        "sv": "Avfrostning På",
-        "fi": "Sulatustila Päällä",
-        "pl": "Rozmrażanie Włączone",
-        "cs": "Odmrazování Zapnuto",
-        "sk": "Odmrazovanie Zapnuté",
-        "hu": "Leolvasztás Bekapcsolva",
-        "pt": "Degelo Ativado",
-        "ro": "Dezghețare Pornită"
-      },
-      "insightsTitleFalse": {
-        "en": "Defrost Off",
-        "nl": "Ontdooien Uit",
-        "de": "Abtauen Aus",
-        "fr": "Dégivrage Désactivé",
-        "it": "Sbrinamento Disattivo",
-        "es": "Descongelación Desactivada",
-        "da": "Afrimning Fra",
-        "no": "Avriming Av",
-        "sv": "Avfrostning Av",
-        "fi": "Sulatustila Pois",
-        "pl": "Rozmrażanie Wyłączone",
-        "cs": "Odmrazování Vypnuto",
-        "sk": "Odmrazovanie Vypnuté",
-        "hu": "Leolvasztás Kikapcsolva",
-        "pt": "Degelo Desativado",
-        "ro": "Dezghețare Oprită"
-      },
-      "getable": true,
-      "setable": false,
-      "insights": true,
-      "uiComponent": "sensor",
-      "minCompatibility": "12.2.0"
     },
     "thermostat_mode": {
       "type": "enum",

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="64px" height="64px" viewBox="0 0 64 64" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>defrost</title>
+    <g id="defrost" stroke="#000000" stroke-width="3.5" stroke-linecap="round" fill="none">
+        <!-- Main arm lines -->
+        <line x1="32" y1="6" x2="32" y2="58"/>
+        <line x1="54.5" y1="19" x2="9.5" y2="45"/>
+        <line x1="54.5" y1="45" x2="9.5" y2="19"/>
+
+        <!-- Branches on up arm at (32,15) -->
+        <line x1="32" y1="15" x2="39" y2="11"/>
+        <line x1="32" y1="15" x2="25" y2="11"/>
+
+        <!-- Branches on upper-right arm at (47,23) -->
+        <line x1="47" y1="23" x2="54" y2="27"/>
+        <line x1="47" y1="23" x2="47" y2="15"/>
+
+        <!-- Branches on lower-right arm at (47,41) -->
+        <line x1="47" y1="41" x2="47" y2="49"/>
+        <line x1="47" y1="41" x2="54" y2="37"/>
+
+        <!-- Branches on down arm at (32,49) -->
+        <line x1="32" y1="49" x2="25" y2="53"/>
+        <line x1="32" y1="49" x2="39" y2="53"/>
+
+        <!-- Branches on lower-left arm at (17,41) -->
+        <line x1="17" y1="41" x2="10" y2="37"/>
+        <line x1="17" y1="41" x2="17" y2="49"/>
+
+        <!-- Branches on upper-left arm at (17,23) -->
+        <line x1="17" y1="23" x2="17" y2="15"/>
+        <line x1="17" y1="23" x2="10" y2="27"/>
+    </g>
+</svg>
