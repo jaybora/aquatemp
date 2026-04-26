@@ -48,7 +48,7 @@
     "en": "Removed the 'off' mode. Now we only have one place for switching device on and off. By the switch."
   },
   "1.8.2": {
-    "en": "Fixed wrongly shown frequency value (it was the exhaust temperature). Added setting for expirimental features. Those features are controlling fan speed and frequency of compressor."
+    "en": "Fixed wrongly shown frequency value (it was the exhaust temperature). Added setting for experimental features. Those features are controlling fan speed and frequency of compressor."
   },
   "1.8.3": {
     "en": "Handle error when device is not available."
@@ -57,6 +57,6 @@
     "en": "Fix bug when device is not available."
   },
   "1.9.0": {
-    "en": "Added defrost detection. The app now shows when the heatpump is in defrost mode, and you can use it in flows."
+    "en": "Added defrost detection — the app now shows when the heat pump is in defrost mode and you can use it in flows. Minor update of app and device icons. Energy/power consumption is changed to being cumulative, so it will work as a power meter. Value is calculated so not completely precise."
   }
 }
