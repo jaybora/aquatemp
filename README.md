@@ -14,22 +14,23 @@ This Homey app provides integration with Aquatemp wifi modules, allowing you to 
 
 ## Features
 ### Device Support
-- ✅ Multiple modules per account supported
-- ⏳ Shared account support planned for future updates
+- Multiple modules per account supported
+- Shared account support planned for future updates
 
 ### Monitoring & Control
-- 🌡️ Temperature Readings
+- Temperature Readings
   - Inlet temperature
   - Outlet temperature
   - Surrounding temperature
-- 🎛️ System Control
+- System Control
   - Thermostat mode (heating/cooling)
   - Turn on/off
-- ⚡ Power Metrics
+- Power Metrics
   - Inverter frequency
-  - Power usage
+  - Power usage 
   - Current (ampere)
   - Voltage
-- ⚠️ Safety Features
+  - Power consumption (calculated, not precise)
+- Safety Features
   - No-flow alarm monitoring
   - Defrost mode detection
