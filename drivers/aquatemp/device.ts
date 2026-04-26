@@ -11,6 +11,7 @@ interface HeatPumpDeviceSettings {
 class HeatPumpDevice extends Homey.Device {
 
   private timer: NodeJS.Timeout | null = null;
+  private lastPollTime: number | null = null;
 
   /**
    * onInit is called when the device is initialized.
@@ -236,9 +237,18 @@ class HeatPumpDevice extends Homey.Device {
       await this.setCapabilityValue('alarm_pump_supply', false).catch(this.error);
     }
     await this.setCapabilityValue('measure_current', this.extractValueByCode(result, ApiRequestCodes.CODES.CURRENT)).catch(this.error);
-    await this.setCapabilityValue('measure_power', Math.round(this.extractValueByCode(result, ApiRequestCodes.CODES.VOLTAGE) * this.extractValueByCode(result, ApiRequestCodes.CODES.CURRENT)));
+    const watts = this.extractValueByCode(result, ApiRequestCodes.CODES.VOLTAGE) * this.extractValueByCode(result, ApiRequestCodes.CODES.CURRENT);
+    await this.setCapabilityValue('measure_power', Math.round(watts));
     await this.setCapabilityValue('onoff', isPowerOn).catch(this.error);
-    await this.setCapabilityValue('meter_power', (this.extractValueByCode(result, ApiRequestCodes.CODES.VOLTAGE) * this.extractValueByCode(result, ApiRequestCodes.CODES.CURRENT)) / 1000).catch(this.error);
+
+    const now = Date.now();
+    if (this.lastPollTime !== null && isPowerOn) {
+      const elapsedHours = (now - this.lastPollTime) / 3_600_000;
+      const energyAdded = (watts / 1000) * elapsedHours;
+      const accumulated = (this.getCapabilityValue('meter_power') as number ?? 0) + energyAdded;
+      await this.setCapabilityValue('meter_power', accumulated).catch(this.error);
+    }
+    this.lastPollTime = now;
     await this.setCapabilityValue('silent_mode', this.extractValueByCode(result, ApiRequestCodes.CODES.SILENT_MODE) === 1).catch(this.error);
 
     const hvacMode = this.getHvacMode(result);

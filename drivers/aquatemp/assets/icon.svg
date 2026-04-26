@@ -1,15 +1,32 @@
-<svg viewBox="0 0 960 960" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="20">
-	<!-- Water waves -->
-	<path d="M110 780c48 48 114 48 152 0s114-48 152 0 114 48 152 0 114-48 152 0 114 48 152 0" stroke-width="40" stroke-linecap="round"/>
-	<path d="M110 900c48 48 114 48 152 0s114-48 152 0 114 48 152 0 114-48 152 0 114 48 152 0" stroke-width="40" stroke-linecap="round"/>
+<svg viewBox="0 0 960 960" xmlns="http://www.w3.org/2000/svg" fill="currentColor" stroke="none">
 
-	<!-- Bigger Heat Pump, centered -->
-	<rect x="190" y="192" width="580" height="350" rx="28" fill="none" stroke="black" stroke-width="40"/>
+	<!-- Body frame (outer rect) + hollow interior (inner rect) + fan ring (outer circle - inner circle), all via evenodd -->
+	<path fill-rule="evenodd" d="
+		M218,192 L742,192 Q770,192 770,220 L770,542 Q770,570 742,570 L218,570 Q190,570 190,542 L190,220 Q190,192 218,192 Z
+		M230,232 L730,232 L730,530 L230,530 Z
+		M360,366 m-110,0 a110,110 0 1,0 220,0 a110,110 0 1,0 -220,0
+		M360,366 m-72,0 a72,72 0 1,0 144,0 a72,72 0 1,0 -144,0
+	"/>
 
-	<!-- Fan shifted to the left -->
-	<circle cx="360" cy="366" r="100" fill="black" />
+	<!-- Vertical panel divider separating fan from grille -->
+	<rect x="497" y="234" width="8" height="294"/>
 
-	<!-- Feet -->
-	<line x1="288" y1="620" x2="288" y2="560" stroke-width="40"/>
-	<line x1="672" y1="620" x2="672" y2="560" stroke-width="40"/>
+	<!-- Intake grille bars -->
+	<rect x="510" y="264" width="212" height="8"/>
+	<rect x="510" y="308" width="212" height="8"/>
+	<rect x="510" y="352" width="212" height="8"/>
+	<rect x="510" y="396" width="212" height="8"/>
+	<rect x="510" y="440" width="212" height="8"/>
+	<rect x="510" y="484" width="212" height="8"/>
+
+	<!-- Left foot -->
+	<rect x="268" y="560" width="40" height="80" rx="6"/>
+
+	<!-- Right foot -->
+	<rect x="652" y="560" width="40" height="80" rx="6"/>
+
+	<!-- Water waves (60px thick ribbon) -->
+	<path d="M110,720 C134,696 206,696 230,720 C254,744 326,744 350,720 C374,696 446,696 470,720 C494,744 566,744 590,720 C614,696 686,696 710,720 C734,744 806,744 830,720 A30,30 0 0,1 830,780 C806,804 734,804 710,780 C686,756 614,756 590,780 C566,804 494,804 470,780 C446,756 374,756 350,780 C326,804 254,804 230,780 C206,756 134,756 110,780 A30,30 0 0,1 110,720 Z"/>
+	<path d="M110,850 C134,826 206,826 230,850 C254,874 326,874 350,850 C374,826 446,826 470,850 C494,874 566,874 590,850 C614,826 686,826 710,850 C734,874 806,874 830,850 A30,30 0 0,1 830,910 C806,934 734,934 710,910 C686,886 614,886 590,910 C566,934 494,934 470,910 C446,886 374,886 350,910 C326,934 254,934 230,910 C206,886 134,886 110,910 A30,30 0 0,1 110,850 Z"/>
+
 </svg>
