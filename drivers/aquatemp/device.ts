@@ -97,6 +97,8 @@ class HeatPumpDevice extends Homey.Device {
       await this.setMaximumFrequencyHeating(value);
     });
 
+    this.lastPollTime = await this.getStoreValue('lastPollTime') ?? null;
+
     await this.updateData();
 
     this.timer = setInterval(async () => {
@@ -249,6 +251,7 @@ class HeatPumpDevice extends Homey.Device {
       await this.setCapabilityValue('meter_power', accumulated).catch(this.error);
     }
     this.lastPollTime = now;
+    await this.setStoreValue('lastPollTime', this.lastPollTime).catch(this.error);
     await this.setCapabilityValue('silent_mode', this.extractValueByCode(result, ApiRequestCodes.CODES.SILENT_MODE) === 1).catch(this.error);
 
     const hvacMode = this.getHvacMode(result);
