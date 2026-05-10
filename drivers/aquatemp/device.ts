@@ -43,9 +43,9 @@ class HeatPumpDevice extends Homey.Device {
       await this.removeCapability('outlet');
     }
 
-    if (!this.hasCapability('measure_temperature.inlet')) {
+    if (!this.hasCapability('measure_temperature.outlet')) {
       this.log('Adding new measure_temperature.outlet capability');
-      await this.addCapability('measure_temperature.inlet');
+      await this.addCapability('measure_temperature.outlet');
     }
 
     if (this.hasCapability('inlet')) {
@@ -99,7 +99,7 @@ class HeatPumpDevice extends Homey.Device {
 
     await this.updateData();
 
-    setInterval(async () => {
+    this.timer = setInterval(async () => {
       await this.updateData();
     }, 30000);
   }
