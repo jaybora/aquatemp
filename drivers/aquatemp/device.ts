@@ -236,8 +236,9 @@ class HeatPumpDevice extends Homey.Device {
     } else {
       await this.setCapabilityValue('alarm_pump_supply', false).catch(this.error);
     }
-    await this.setCapabilityValue('measure_current', this.extractValueByCode(result, ApiRequestCodes.CODES.CURRENT)).catch(this.error);
-    const watts = this.extractValueByCode(result, ApiRequestCodes.CODES.VOLTAGE) * this.extractValueByCode(result, ApiRequestCodes.CODES.CURRENT);
+    const current = this.extractValueByCode(result, ApiRequestCodes.CODES.CURRENT) / 10;
+    await this.setCapabilityValue('measure_current', current).catch(this.error);
+    const watts = this.extractValueByCode(result, ApiRequestCodes.CODES.VOLTAGE) * current;
     await this.setCapabilityValue('measure_power', Math.round(watts));
     await this.setCapabilityValue('onoff', isPowerOn).catch(this.error);
 
