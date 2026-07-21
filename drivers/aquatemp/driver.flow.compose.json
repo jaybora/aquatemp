@@ -348,7 +348,7 @@
           "name": "maximal_frequency_in_heating_mode",
           "type": "range",
           "min": 20,
-          "max": 60,
+          "max": 90,
           "step": 5,
           "value": 50,
           "label": "Hz",
