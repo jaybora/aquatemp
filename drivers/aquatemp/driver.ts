@@ -62,8 +62,7 @@ class MyDriver extends Homey.Driver {
     this.homey.flow.getActionCard('thermostat_mode_set')
       .registerRunListener(async (args, state) => {
         this.log(`Setting thermostat mode to: ${args.thermostat_mode}`);
-        await args.device.setThermostatMode(args.thermostat_mode);
-        return args.device.setCapabilityValue('thermostat_mode', args.thermostat_mode);
+        await args.device.setHvacMode(args.thermostat_mode);
       });
   }
 

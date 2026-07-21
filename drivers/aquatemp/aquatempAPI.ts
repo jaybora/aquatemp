@@ -180,7 +180,7 @@ export class AquatempAPI {
     const devices = await this.getOwnDevices();
     const device = devices.data.objectResult.find((x: any) => x.device_code === deviceCode);
     console.log(`Device found in list of devices: ${deviceCode} ${device}`);
-    if (device.deviceStatus !== 'ONLINE') {
+    if (!device || device.deviceStatus !== 'ONLINE') {
       throw new DeviceOfflineError(`Device ${deviceCode} is not online`);
     }
     console.log('Device is online, getting data from server: ', deviceCode, '')
@@ -199,16 +199,13 @@ export class AquatempAPI {
       });
     });
 
-    if (result.data.objectResult.length === 0) {
-      throw new ApiRequestError('Getting device data from aquatemp server failed. Reply from server is empty');
+    if (!result.data.isReusltSuc) {
+      console.log(`Getting device data from server failed, isReusltSuc = false. Returned data from server is ${result.data.objectResult}`);
+      throw new ApiRequestError('Getting device data from aquatemp server failed.');
     }
 
-
-
-    if (!result.data.isReusltSuc) {
-      console.log(`Getting device data from server failed, isResultSec = false. 
-      Returned data from server is ${result.data.objectResult}`);
-      throw new ApiRequestError('Getting device data from aquatemp server failed.');
+    if (!result.data.objectResult || result.data.objectResult.length === 0) {
+      throw new ApiRequestError('Getting device data from aquatemp server failed. Reply from server is empty');
     }
     return result.data.objectResult;
   }

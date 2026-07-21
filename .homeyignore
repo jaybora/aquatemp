@@ -1,0 +1,22 @@
+# Dev tooling
+node_modules/
+package-lock.json
+.homeybuild/
+
+# Developer reference files
+modbus_spec.xls
+httprequests.http
+
+# TypeScript sources (compiled output in .homeybuild is used)
+*.ts
+
+# Editor & tooling
+.eslintrc.json
+tsconfig.json
+.claude/
+
+# Docs
+CLAUDE.md
+CONTRIBUTING.md
+CODE_OF_CONDUCT.md
+README.txt

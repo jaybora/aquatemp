@@ -1038,6 +1038,7 @@
           "template": "add_devices"
         }
       ],
+      "energy": {},
       "id": "aquatemp",
       "settings": [
         {

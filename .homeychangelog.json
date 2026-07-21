@@ -60,6 +60,6 @@
     "en": "Added defrost detection — the app now shows when the heat pump is in defrost mode and you can use it in flows. Minor update of app and device icons. Energy/power consumption is changed to being cumulative, so it will work as a power meter. Value is calculated so not completely precise."
   },
   "1.10.0": {
-    "en": "Fixed current/ampere reading."
+    "en": "Fixed current/ampere reading. Fixed thermostat mode flow card not working. Fixed outlet temperature not being added correctly on upgrade. Fixed app not cleaning up the poll timer on device removal. Fixed crashes when the device API returns unexpected data. Added energy dashboard support."
   }
 }

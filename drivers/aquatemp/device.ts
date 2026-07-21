@@ -43,9 +43,9 @@ class HeatPumpDevice extends Homey.Device {
       await this.removeCapability('outlet');
     }
 
-    if (!this.hasCapability('measure_temperature.inlet')) {
+    if (!this.hasCapability('measure_temperature.outlet')) {
       this.log('Adding new measure_temperature.outlet capability');
-      await this.addCapability('measure_temperature.inlet');
+      await this.addCapability('measure_temperature.outlet');
     }
 
     if (this.hasCapability('inlet')) {
@@ -99,7 +99,7 @@ class HeatPumpDevice extends Homey.Device {
 
     await this.updateData();
 
-    setInterval(async () => {
+    this.timer = setInterval(async () => {
       await this.updateData();
     }, 30000);
   }
@@ -295,15 +295,21 @@ class HeatPumpDevice extends Homey.Device {
   extractTargetTemperature(hvacMode: string, result: any) {
     let targetTemp = 0;
     switch (hvacMode) {
-      case 'cool':
-        targetTemp = Number(result.find((x: any) => x.code === ApiRequestCodes.CODES.COOL_TEMP_SETTING).value) > 35 ? 35 : (Number(result.find((x: any) => x.code === ApiRequestCodes.CODES.COOL_TEMP_SETTING).value));
+      case 'cool': {
+        const cool = result.find((x: any) => x.code === ApiRequestCodes.CODES.COOL_TEMP_SETTING);
+        targetTemp = cool ? Math.min(Number(cool.value), 35) : 0;
         break;
-      case 'auto':
-        targetTemp = Number(result.find((x: any) => x.code === ApiRequestCodes.CODES.AUTO_TEMP_SETTING).value) > 35 ? 35 : (Number(result.find((x: any) => x.code === ApiRequestCodes.CODES.AUTO_TEMP_SETTING).value));
+      }
+      case 'auto': {
+        const auto = result.find((x: any) => x.code === ApiRequestCodes.CODES.AUTO_TEMP_SETTING);
+        targetTemp = auto ? Math.min(Number(auto.value), 35) : 0;
         break;
-      default:
-        targetTemp = Number(result.find((x: any) => x.code === ApiRequestCodes.CODES.HEAT_TEMP_SETTING).value) > 35 ? 35 : (Number(result.find((x: any) => x.code === ApiRequestCodes.CODES.HEAT_TEMP_SETTING).value));
+      }
+      default: {
+        const heat = result.find((x: any) => x.code === ApiRequestCodes.CODES.HEAT_TEMP_SETTING);
+        targetTemp = heat ? Math.min(Number(heat.value), 35) : 0;
         break;
+      }
     }
     return targetTemp;
   }
@@ -363,7 +369,7 @@ class HeatPumpDevice extends Homey.Device {
   getHvacMode(result: any): string {
     let mode = '';
     const modeString = result.find((x: any) => x.code === ApiRequestCodes.CODES.MODE);
-    switch (modeString.value) {
+    switch (modeString?.value) {
       case '0':
         mode = 'cool';
         break;
