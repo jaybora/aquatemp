@@ -58,5 +58,8 @@
   },
   "1.9.0": {
     "en": "Added defrost detection — the app now shows when the heat pump is in defrost mode and you can use it in flows. Minor update of app and device icons. Energy/power consumption is changed to being cumulative, so it will work as a power meter. Value is calculated so not completely precise."
+  },
+  "1.10.0": {
+    "en": "Fixed current/ampere reading."
   }
 }
