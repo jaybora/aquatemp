@@ -1044,14 +1044,50 @@
         {
           "type": "group",
           "label": {
-            "en": "Experimental features"
+            "en": "Experimental features",
+            "nl": "Experimentele functies",
+            "de": "Experimentelle Funktionen",
+            "fr": "Fonctionnalités expérimentales",
+            "it": "Funzionalità sperimentali",
+            "es": "Características experimentales",
+            "da": "Eksperimentelle funktioner",
+            "no": "Eksperimentelle funksjoner",
+            "sv": "Experimentella funktioner",
+            "fi": "Kokeelliset ominaisuudet",
+            "pl": "Funkcje eksperymentalne",
+            "cs": "Experimentální funkce",
+            "sk": "Experimentálne funkcie",
+            "hu": "Kísérleti funkciók",
+            "pt": "Funcionalidades experimentais",
+            "ro": "Funcții experimentale",
+            "ru": "Экспериментальные функции",
+            "ko": "실험적 기능",
+            "id": "Fitur eksperimental"
           },
           "children": [
             {
               "id": "enable_experimental_features",
               "type": "checkbox",
               "label": {
-                "en": "Enable experimental features"
+                "en": "Enable experimental features",
+                "nl": "Experimentele functies inschakelen",
+                "de": "Experimentelle Funktionen aktivieren",
+                "fr": "Activer les fonctionnalités expérimentales",
+                "it": "Abilita funzionalità sperimentali",
+                "es": "Activar características experimentales",
+                "da": "Aktiver eksperimentelle funktioner",
+                "no": "Aktiver eksperimentelle funksjoner",
+                "sv": "Aktivera experimentella funktioner",
+                "fi": "Ota kokeelliset ominaisuudet käyttöön",
+                "pl": "Włącz funkcje eksperymentalne",
+                "cs": "Povolit experimentální funkce",
+                "sk": "Povoliť experimentálne funkcie",
+                "hu": "Kísérleti funkciók engedélyezése",
+                "pt": "Ativar funcionalidades experimentais",
+                "ro": "Activați funcțiile experimentale",
+                "ru": "Включить экспериментальные функции",
+                "ko": "실험적 기능 활성화",
+                "id": "Aktifkan fitur eksperimental"
               },
               "value": false,
               "hint": {
